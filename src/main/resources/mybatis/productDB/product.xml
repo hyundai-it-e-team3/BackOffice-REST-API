@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mycompany.backOfficeAPI.dao.productDB.ProductDAO">
+	<select id="selectByProductId" parameterType="string" resultType="product">
+		SELECT *
+		FROM product
+		WHERE product_id = #{productId} and status = '1'
+	</select>
+	
+	<select id="selectCountByBrandName" parameterType="string" resultType="int">
+		SELECT count(*)
+		FROM product a, product_category b
+		WHERE a.product_id = b.product_id and b.category_id LIKE '%'||#{categoryId}||'%' and brand_name = #{brandName} and status = '1' 
+	</select>
+	<select id="selectCountByCategoryId" parameterType="string" resultType="int">
+		SELECT count(*)
+		FROM product a, product_category b
+		WHERE a.product_id = b.product_id and b.category_id LIKE '%'||#{categoryId}||'%' and status = '1' 
+	</select>
+	
+	<select id="selectCountByText" parameterType="string" resultType="int">
+		SELECT count(*)
+		FROM product 
+		WHERE name LIKE '%'||#{text}||'%' and status = '1' 
+	</select>
+	
+	<select id="selectAllCount" resultType="int">
+		SELECT count(*)
+		FROM product
+		WHERE status = '1' 
+	</select>
+	
+	<select id="selectProductListByBrandName" parameterType="map" resultType="product">
+		<![CDATA[
+			SELECT * FROM (SELECT rownum rn , c.* from (SELECT a.*
+			FROM product a , product_category b
+			WHERE a.product_id = b.product_id and b.category_id LIKE '%'||#{categoryId}||'%' and status = '1' and brand_name = #{brandName} order by ${sortId} ${sortWay} , a.product_id) c ) d where d.rn>= #{startRow} and d.rn<=#{endRow}
+		]]>
+	</select>
+	
+	<select id="selectProductListByBrandNameAndCategory" parameterType="map" resultType="product">
+		<![CDATA[
+			SELECT * FROM (SELECT rownum rn , c.* from (SELECT a.*
+			FROM product a , product_category b
+			WHERE a.product_id = b.product_id and b.category_id LIKE '%'||#{categoryId}||'%' and status = '1' and brand_name = #{brandName} order by ${sortId} ${sortWay} , a.product_id) c ) d where d.rn>= #{startRow} and d.rn<=#{endRow}
+		]]>
+	</select>
+	
+	<select id="selectProductListByCategoryId" parameterType="map" resultType="product">
+		<![CDATA[
+			SELECT * FROM (SELECT rownum rn , c.* from (SELECT a.*
+			FROM product a , product_category b
+			WHERE a.product_id = b.product_id and b.category_id LIKE '%'||#{categoryId}||'%' and status = '1' order by ${sortId} ${sortWay} , a.product_id) c ) d where d.rn>= #{startRow} and d.rn<=#{endRow}
+		]]>
+	</select>
+	
+	<select id="selectAllProductList" parameterType="map" resultType="product">
+		<![CDATA[
+			SELECT * FROM (SELECT rownum rn , c.* from (SELECT *
+			FROM product order by ${sortId} ${sortWay} , product_id) c)d where d.rn>= #{startRow} and d.rn<=#{endRow} 
+		]]>
+	</select>
+	
+	<select id="SelectProductByText" parameterType="map" resultType="product">
+		<![CDATA[
+			SELECT * FROM (SELECT rownum rn , c.* from (SELECT *
+			FROM product where name like '%'||#{text}||'%' order by ${sortId} ${sortWay} , product_id) c)d where d.rn>= #{startRow} and d.rn<=#{endRow} 
+		]]>
+	</select>
+	
+	<select id="selectProductListByWish" parameterType="string" resultType="product">
+		SELECT * FROM product WHERE product_id IN
+		<foreach collection="list" index="index" item="product_id" open="(" close=")" separator=",">
+			#{product_id}
+		</foreach>
+	</select>
+	
+	<update id="updateHitCount" parameterType="string">
+		UPDATE product SET hit_count =  hit_count + 1 WHERE product_id = #{productId}
+	</update>
+</mapper>
+
+

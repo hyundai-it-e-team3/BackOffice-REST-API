@@ -11,8 +11,17 @@
 		<typeAlias type="com.mycompany.backOfficeAPI.dto.member.Member" alias="member"/>
 		
 		
+		<typeAlias type="com.mycompany.backOfficeAPI.dto.product.BrandCategoryDTO" alias="brandCategory"/>
+		<typeAlias type="com.mycompany.backOfficeAPI.dto.product.BrandCategoryTempDTO" alias="brandCategoryTemp"/>
+		<typeAlias type="com.mycompany.backOfficeAPI.dto.product.BrandDTO" alias="brand"/>
+		<typeAlias type="com.mycompany.backOfficeAPI.dto.product.BrandMainProductDTO" alias="brandMainProduct"/>
+		<typeAlias type="com.mycompany.backOfficeAPI.dto.product.CategoryDTO" alias="category"/>
+		<typeAlias type="com.mycompany.backOfficeAPI.dto.product.ProductCategoryDTO" alias="productCategory"/>
+		<typeAlias type="com.mycompany.backOfficeAPI.dto.product.ProductDetailDTO" alias="productDetail"/>
+		<typeAlias type="com.mycompany.backOfficeAPI.dto.product.ProductDTO" alias="product"/>
+		<typeAlias type="com.mycompany.backOfficeAPI.dto.product.ProductImgDTO" alias="productImg"/>
 		<typeAlias type="com.mycompany.backOfficeAPI.dto.product.StockDTO" alias="stock"/>
-	
+		
 	
 		<typeAlias type="com.mycompany.backOfficeAPI.dto.order.Order" alias="order"/>
 		

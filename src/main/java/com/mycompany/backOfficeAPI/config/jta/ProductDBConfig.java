@@ -17,7 +17,7 @@ import com.atomikos.jdbc.AtomikosDataSourceBean;
 
 @Configuration
 @MapperScan(
-	basePackages="com.mycompany.orderAPI.dao.productDB", 
+	basePackages="com.mycompany.backOfficeAPI.dao.productDB", 
 	sqlSessionFactoryRef="productDBSqlSessionFactory"
 )
 public class ProductDBConfig {
