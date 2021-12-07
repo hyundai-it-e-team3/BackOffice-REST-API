@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mycompany.backOfficeAPI.dao.productDB.CategoryDAO">
+	<select id="selectAllMain" resultType="category">
+		SELECT *
+		FROM category
+		WHERE clevel = 1 order by category_id
+	</select>
+
+	<select id="selectAllMiddle" resultType="category">
+		SELECT *
+		FROM category
+		WHERE clevel = 2 order by category_id
+	</select>
+	
+	<select id="selectAllSub" resultType="category">
+		SELECT *
+		FROM category
+		WHERE clevel = 3 order by category_id
+	</select>
+	
+	<select id="selectMiddleCategoryById" resultType="category">
+		SELECT *
+		FROM category
+		WHERE parent_category_id = #{categoryId}
+	</select>
+	
+	<select id="selectSubCategoryById" resultType="category">
+		SELECT *
+		FROM category
+		WHERE parent_category_id = #{parentCategoryId}
+	</select>
+</mapper>
+
