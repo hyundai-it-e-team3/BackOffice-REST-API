@@ -32,6 +32,13 @@
 		
 	
 		<typeAlias type="com.mycompany.backOfficeAPI.dto.order.Order" alias="order"/>
+		<typeAlias type="com.mycompany.backOfficeAPI.dto.order.OrderDetail" alias="orderDetail"/>
+		<typeAlias type="com.mycompany.backOfficeAPI.dto.order.Payment" alias="payment"/>
+		<typeAlias type="com.mycompany.backOfficeAPI.dto.order.Cart" alias="cart"/>
+		<typeAlias type="com.mycompany.backOfficeAPI.dto.order.OdTimeline" alias="odTimeline"/>
+		<typeAlias type="com.mycompany.backOfficeAPI.dto.order.OTimeline" alias="oTimeline"/>
+		<typeAlias type="com.mycompany.backOfficeAPI.dto.order.PTimeline" alias="pTimeline"/>
+		
 		
 		
 	</typeAliases>

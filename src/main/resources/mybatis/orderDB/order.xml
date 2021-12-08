@@ -2,5 +2,30 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mycompany.backOfficeAPI.dao.orderDB.OrderDao">
 	
+	<select id="selectByOid" resultType="order" parameterType="String">
+		SELECT member_id, order_date, state, request, zip_code, address1, address2, tel, tel, name, coupon_id
+		FROM morder
+		WHERE order_id = #{value}
+	</select>
+	
+	<select id="selectByOidMid" resultType="order" parameterType="Map">
+		SELECT order_date, state, request, zip_code, address1, address2, tel, tel, name, coupon_id
+		FROM morder
+		WHERE order_id = #{orderId} AND member_id = #{memberId} 
+	</select>
+	
+	<select id="selectByMid" resultType="order" parameterType="String">
+		SELECT order_id, order_date, state
+		FROM morder
+		WHERE member_id=#{value}
+		ORDER BY order_date DESC
+	</select>
+	
+	<update id="updateState" parameterType="order">
+		UPDATE morder
+		SET state = #{state}
+		WHERE order_id = #{orderId}
+	</update>
+
 </mapper>
 
