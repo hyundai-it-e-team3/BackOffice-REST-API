@@ -38,6 +38,7 @@
 		<typeAlias type="com.mycompany.backOfficeAPI.dto.order.OdTimeline" alias="odTimeline"/>
 		<typeAlias type="com.mycompany.backOfficeAPI.dto.order.OTimeline" alias="oTimeline"/>
 		<typeAlias type="com.mycompany.backOfficeAPI.dto.order.PTimeline" alias="pTimeline"/>
+		<typeAlias type="com.mycompany.backOfficeAPI.dto.order.OrderInfo" alias="orderInfo"/>
 		
 		
 		
