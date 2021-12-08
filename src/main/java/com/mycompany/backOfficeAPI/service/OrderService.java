@@ -16,6 +16,7 @@ import com.mycompany.backOfficeAPI.dao.orderDB.PTimelineDao;
 import com.mycompany.backOfficeAPI.dao.orderDB.PaymentDao;
 import com.mycompany.backOfficeAPI.dto.order.Order;
 import com.mycompany.backOfficeAPI.dto.order.OrderDetail;
+import com.mycompany.backOfficeAPI.dto.order.OrderInfo;
 import com.mycompany.backOfficeAPI.dto.order.Payment;
 
 import lombok.extern.slf4j.Slf4j;
@@ -107,6 +108,10 @@ public class OrderService {
 	public List<OrderDetail> getOrderProducts(String orderId) {
 		log.info("실행");
 		return orderDetailDao.selectByOid(orderId);
+	}
+	
+	public List<OrderInfo> getOrderInfoList() {
+		return orderDao.selectOrderList();
 	}
 
 }
