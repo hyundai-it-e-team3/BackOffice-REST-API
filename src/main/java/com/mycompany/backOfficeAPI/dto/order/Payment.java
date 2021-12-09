@@ -4,11 +4,11 @@ import lombok.Data;
 
 @Data
 public class Payment{
-	char type;
+	String type;
 	int price;
 	String accountNo;
 	String bank;
 	int installment;
 	String orderId;
-	char state;
+	String state;
 }

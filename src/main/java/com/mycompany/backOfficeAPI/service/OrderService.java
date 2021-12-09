@@ -1,8 +1,10 @@
 package com.mycompany.backOfficeAPI.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.StringTokenizer;
 
 import javax.annotation.Resource;
 
@@ -14,10 +16,12 @@ import com.mycompany.backOfficeAPI.dao.orderDB.OrderDao;
 import com.mycompany.backOfficeAPI.dao.orderDB.OrderDetailDao;
 import com.mycompany.backOfficeAPI.dao.orderDB.PTimelineDao;
 import com.mycompany.backOfficeAPI.dao.orderDB.PaymentDao;
+import com.mycompany.backOfficeAPI.dao.productDB.ProductDAO;
 import com.mycompany.backOfficeAPI.dto.order.Order;
 import com.mycompany.backOfficeAPI.dto.order.OrderDetail;
 import com.mycompany.backOfficeAPI.dto.order.OrderInfo;
 import com.mycompany.backOfficeAPI.dto.order.Payment;
+import com.mycompany.backOfficeAPI.dto.product.ProductDTO;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -46,6 +50,8 @@ public class OrderService {
 	private OTimelineDao oTimelineDao;
 	@Resource
 	private PTimelineDao pTimelineDao;
+	@Resource
+	private ProductDAO productDao;
 	
 	public Map<String, Object> getOrderInfo(
 			String orderId) {
@@ -58,13 +64,36 @@ public class OrderService {
 			map.put("result", "fail");
 		} else {
 			map.put("result", "success");
-			map.put("order", order);
+			
 			
 			List<OrderDetail> odList = orderDetailDao.selectByOid(orderId);
-			List<Payment> payment = paymentDao.selectByOid(orderId);
+			List<OrderDetail> orderDetails = new ArrayList<OrderDetail>();
+			for(OrderDetail orderDetail : odList) {
+				String productDetailId = orderDetail.getProductDetailId();
+				StringTokenizer st = new StringTokenizer(productDetailId, "_");
+				String productId = st.nextToken();
+				ProductDTO product = productDao.selectByProductId(productId);
+				orderDetail.setBrand(product.getBrandName());
+				orderDetail.setColor(st.nextToken());
+				orderDetail.setName(product.getName());
+				orderDetails.add(orderDetail);
+			}
+			map.put("orderDetails", orderDetails);
 			
-			map.put("orderDetails", odList);
-			map.put("payments", payment);
+			List<Payment> payments = paymentDao.selectByOid(orderId);
+			map.put("payments", payments);
+			
+			String payType = "";
+			int totalPrice = 0;
+			for(Payment payment : payments) {
+				payType += payment.getType() + " ";
+				totalPrice += payment.getPrice();
+			}
+			
+			order.setPayType(payType);
+			order.setTotalPrice(totalPrice);
+			
+			map.put("order", order);
 		}
 		return map;
 	}

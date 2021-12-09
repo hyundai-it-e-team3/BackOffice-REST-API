@@ -12,13 +12,20 @@ CREATE OR REPLACE VIEW orderDetail_view AS
 
 
 CREATE OR REPLACE VIEW payment_view AS
-    SELECT order_id, SUM(price) total_price, MAX(state) pay_type
-    FROM payment
-    GROUP BY order_id ;
+    SELECT p.order_id, p.total_price, pt.content pay_type
+    FROM
+        (
+        SELECT order_id, SUM(price) total_price, MAX(type) maxval
+        FROM payment
+        GROUP BY order_id ) p, pay_type pt
+    WHERE p.maxval = pt.type;
+
+
 
 CREATE OR REPLACE VIEW order_view AS
-    SELECT order_id, order_date, member_id, state order_state
-    FROM morder
+    SELECT o.order_id, o.order_date, o.member_id, os.content order_state
+    FROM morder o, order_state os
+    WHERE o.state = os.state
     ORDER BY order_date DESC;
     
     
