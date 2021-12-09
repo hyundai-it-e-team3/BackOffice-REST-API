@@ -1,6 +1,7 @@
 package com.mycompany.backOfficeAPI.dao.productDB;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
@@ -14,5 +15,9 @@ public interface ProductDetailDAO {
 	public List<ProductDetailDTO> selectAllByProductId(String productId);
 
 	public int selectPrice(String productDetailId);
+
+	public int selectTotalProductDetailBySearch(Map<String, String> map);
+
+	public List<ProductDetailDTO> selectProductDetailBySearch(Map<String, Object> map);
 
 }

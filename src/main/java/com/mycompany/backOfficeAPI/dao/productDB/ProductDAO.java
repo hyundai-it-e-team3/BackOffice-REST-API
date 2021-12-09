@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.mycompany.backOfficeAPI.dto.product.ProductDTO;
+import com.mycompany.backOfficeAPI.dto.product.ProductSearchDTO;
 
 @Mapper
 public interface ProductDAO {
@@ -36,7 +37,9 @@ public interface ProductDAO {
 
 	public List<ProductDTO> SelectProductByText(Map<String, Object> mp);
 
-	
+	public List<ProductDTO> selectProductListBySearch(ProductSearchDTO productSearchDTO);
+
+	public int selectProductListCountBySearch(ProductSearchDTO productSearchDTO);
 
 
 }

@@ -31,5 +31,11 @@
 		FROM category
 		WHERE parent_category_id = #{parentCategoryId}
 	</select>
+	
+	<select id="selectCategoryById" resultType="category" parameterType="string">
+		SELECT *
+		FROM category
+		WHERE category_id = #{categoryId}
+	</select>
 </mapper>
 

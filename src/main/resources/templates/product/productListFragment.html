@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"> 
+	  <div id="productTable">
+		<table class="table table-sm table-bordered">
+	      <thead class="align-middle text-center">
+	        <tr>
+	          <th scope="col"><input type="checkbox"></th>
+	          <th scope="col">카테고리</th>
+	          <th scope="col">상품코드</th>
+	          <th scope="col">상품명</th>
+	          <th scope="col">진열 상태</th>
+	          <th scope="col">판매가</th>
+	          <th scope="col">상품 등록일</th>
+	          <th scope="col">조회수 대비 구매율</th>
+	        </tr>
+	      </thead>
+	      <tbody class="align-middle text-center">
+	        <tr th:each="product : ${productList}">
+	          <td><input type="checkbox"></td>
+	          <td>
+	          	<th:block th:each="category,status :${product.categoryList}">
+	          		[[${category}]]<i th:if="${status.index}!=2" class="bi bi-caret-right-fill"/>
+	          	</th:block>
+	          </td>
+	          <td><a class="text-warning" th:onclick="fnModuleInfo([[${product.productId}]])">[[${product.productId}]]</a></td>
+	          <td>[[${product.name}]]</td>
+	          <td><span class="status text-success">&bull;</span>진열중</td>
+	          <td>[[${product.price}]]</td>
+	          <td th:text="${#dates.format(product.regDate, 'yyyy-MM-dd')}"></td>
+	          <td class="align-middle">
+				<div class="progress">
+				  <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 75%"></div>
+				</div>
+	          </td>
+	        </tr>
+			<tr>
+				<td colspan="8" class="text-center">
+					<div>
+						<a onclick="goSearch(1)" class="btn btn-outline-primary btn-sm">처음</a>
+					    <a th:if="${pager.groupNo>1}" th:onclick="goSearch([[${pager.startPageNo-1}]])" class="btn btn-outline-primary btn-sm">이전</a>
+					    <th:block th:each="i : ${#numbers.sequence(pager.startPageNo,pager.endPageNo)}">
+					         			
+					    	<a th:class="(${pager.pageNo!=i})?'btn btn-primary btn-sm':'btn btn-warning btn-sm'" th:onclick="goSearch([[${i}]])">[[${i}]]</a>
+					        <!--  
+					        <a class="btn btn-sm" th:classappend="(${pager.pageNo!=i})?'btn-primary':''btn-warning'" th:href="@{boardList(pageNo=${i})}">[[${i}]]</a>
+					         -->
+					    </th:block>
+					    <a th:if="${pager.groupNo<pager.totalGroupNo}" th:onclick="goSearch([[${pager.endPageNo+1}]])" class="btn btn-outline-primary btn-sm">다음</a>
+					    <a th:onclick="goSearch([[${pager.totalPageNo}]])" class="btn btn-outline-primary btn-sm">맨끝</a>
+					</div>
+				</td>
+			</tr>
+	      </tbody>
+	    </table>
+	  </div>
+</html>

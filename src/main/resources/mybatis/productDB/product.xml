@@ -2,11 +2,95 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.mycompany.backOfficeAPI.dao.productDB.ProductDAO">
-	<select id="selectByProductId" parameterType="string" resultType="product">
-		SELECT *
-		FROM product
-		WHERE product_id = #{productId} and status = '1'
+	<select id="selectByProductId" parameterType="string" resultType="product">                 
+        SELECT * FROM            
+		(SELECT 
+			a.product_id,a.name,price,content,hit_count
+			,status,reg_date,brand_name,thumbnail
+			,b.category_id,c.parent_category_id, c.clevel,c.name category_name
+		FROM product a, product_category b, category c
+		WHERE a.product_id = b.product_id AND b.category_id = c.category_id AND a.product_id = #{productId})
+        WHERE ROWNUM = 1
 	</select>
+	
+	<select id="selectProductListBySearch" parameterType="productSearch" resultType="product">
+			SELECT rnum , product_id,name,price,content,hit_count
+						,status,reg_date,brand_name,thumbnail
+						,category_id,parent_category_id,clevel,category_name
+				FROM(SELECT rownum as rnum, product_id,name,price,content,hit_count
+						,status,reg_date,brand_name,thumbnail
+						,category_id,parent_category_id,clevel,category_name
+					FROM(SELECT 
+						a.product_id,a.name,price,content,hit_count
+						,status,reg_date,brand_name,thumbnail
+						,b.category_id,c.parent_category_id, c.clevel,c.name category_name
+						FROM product a, product_category b, category c
+						WHERE 
+							a.product_id = b.product_id AND
+							b.category_id = c.category_id AND
+							<if test="searchType != 'None' ">
+				    			a.${searchType} like '%'||#{keyWord}||'%' AND
+				    		</if>
+				 			<if test="searchType == 'None' ">
+				    			(a.product_id like '%'||#{keyWord}||'%' 
+				    			OR a.name like '%'||#{keyWord}||'%'
+				    			OR a.brand_name like '%'||#{keyWord}||'%') AND
+				    		</if>
+				    		
+				    		<if test="regStart != '' and regEnd != ''" >
+				    			<![CDATA[ (a.reg_date >= #{regStart} AND a.reg_date <= #{regEnd})]]> AND
+				    		</if>
+				    		
+				    		<if test="regStart == '' and regEnd != ''" >
+				    			<![CDATA[ a.reg_date <= #{regEnd} ]]> AND 
+				    		</if>
+				    		
+				    		<if test="regStart != '' and regEnd == ''" >
+				    			<![CDATA[ a.reg_date >= #{regStart} ]]> AND 
+				    		</if>
+				    		
+				    		
+				    		b.category_id like '%'||#{categoryId}||'%' order by category_id)d where <![CDATA[rownum<=#{endRow}]]> ) e where  <![CDATA[rnum>= #{startRow}]]>  
+	</select>
+	
+	
+	
+	
+	
+	
+	
+	<select id="selectProductListCountBySearch" parameterType="productSearch" resultType="int">
+
+		SELECT count(*)
+		FROM product a, product_category b
+		WHERE 
+			a.product_id = b.product_id AND
+			<if test="searchType != 'None' ">
+    			${searchType} like '%'||#{keyWord}||'%' AND
+    		</if>
+ 			<if test="searchType == 'None' ">
+    			(a.product_id like '%'||#{keyWord}||'%' 
+    			OR name like '%'||#{keyWord}||'%'
+    			OR brand_name like '%'||#{keyWord}||'%') AND
+    		</if>
+    		
+    		<if test="regStart != '' and regEnd != ''" >
+    			<![CDATA[ (reg_date >= #{regStart} AND reg_date <= #{regEnd})]]> AND
+    		</if>
+    		
+    		<if test="regStart == '' and regEnd != ''" >
+    			<![CDATA[ reg_date <= #{regEnd} ]]> AND 
+    		</if>
+    		
+    		<if test="regStart != '' and regEnd == ''" >
+    			<![CDATA[ reg_date >= #{regStart} ]]> AND 
+    		</if>
+    		
+    		
+    		b.category_id like '%'||#{categoryId}||'%'
+    	
+	</select>
+	
 	
 	<select id="selectCountByBrandName" parameterType="string" resultType="int">
 		SELECT count(*)

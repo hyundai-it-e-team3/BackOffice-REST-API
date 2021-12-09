@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"> 
+<div id="stockTable">
+	    <table class="table table-sm table-bordered">
+	      <thead class="align-middle text-center">
+	        <tr>
+	          <th scope="col">브랜드</th>
+	          <th scope="col">상품코드</th>
+	          <th scope="col">상품명</th>
+	          <th scope="col">상세상품코드</th>
+	          <th scope="col">사이즈</th>
+	          <th scope="col">재고</th>
+	          <th scope="col">판매량</th>
+	        </tr>
+	      </thead>
+	      <tbody class="align-middle text-center">
+	        <tr th:each="stock : ${stockList}">
+	          <td>[[${stock.brandName}]]</td>
+	          <td>[[${stock.productId}]]</td>
+	          <td>[[${stock.name}]]</td>
+	          <td><a class="text-warning" th:onclick="fnModuleInfo([[${stock.productId}]])">[[${stock.productDetailId}]]</a></td>
+	          <td>[[${stock.psize}]]</td>
+	          <td>
+	            <button class="btn btn-outline-dark btn-sm mr-1" style="height: 25px; width: 25px; padding: 1px;">-</button>
+	            [[${stock.amount}]]
+	            <button class="btn btn-outline-dark btn-sm ml-1" style="height: 25px; width: 25px; padding: 1px;">+</button>
+	          </td>
+	          <td>4/10</td>
+	        </tr>
+			<tr>
+				<td colspan="8" class="text-center">
+					<div>
+						<a onclick="goSearch(1)" class="btn btn-outline-primary btn-sm">처음</a>
+					    <a th:if="${pager.groupNo>1}" th:onclick="goSearch([[${pager.startPageNo-1}]])" class="btn btn-outline-primary btn-sm">이전</a>
+					    <th:block th:each="i : ${#numbers.sequence(pager.startPageNo,pager.endPageNo)}">
+					         			
+					    	<a th:class="(${pager.pageNo!=i})?'btn btn-primary btn-sm':'btn btn-warning btn-sm'" th:onclick="goSearch([[${i}]])">[[${i}]]</a>
+					        <!--  
+					        <a class="btn btn-sm" th:classappend="(${pager.pageNo!=i})?'btn-primary':''btn-warning'" th:href="@{boardList(pageNo=${i})}">[[${i}]]</a>
+					         -->
+					    </th:block>
+					    <a th:if="${pager.groupNo<pager.totalGroupNo}" th:onclick="goSearch([[${pager.endPageNo+1}]])" class="btn btn-outline-primary btn-sm">다음</a>
+					    <a th:onclick="goSearch([[${pager.totalPageNo}]])" class="btn btn-outline-primary btn-sm">맨끝</a>
+					</div>
+				</td>
+			</tr>
+	      </tbody>
+	    </table>
+    </div>
+</html>

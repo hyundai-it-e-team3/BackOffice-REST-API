@@ -16,6 +16,10 @@ public class ProductDTO {
 	private Date regDate;
 	private String brandName;
 	private String thumbnail;
+	private String categoryId;
+	private String parentCategoryId;
+	private int clevel;
+	private String categoryName;
 	private List<ProductDetailDTO> productDetailList;
-	private ProductDetailDTO productDetail;
+	private List<String> categoryList;
 }
