@@ -3,9 +3,9 @@
 <mapper namespace="com.mycompany.backOfficeAPI.dao.orderDB.OrderDao">
 	
 	<select id="selectByOid" resultType="order" parameterType="String">
-		SELECT member_id, order_date, state, request, zip_code, address1, address2, tel, tel, name, coupon_id
-		FROM morder
-		WHERE order_id = #{value}
+		SELECT o.member_id, o.order_id, o.order_date, os.content state, o.request, o.zip_code, o.address1, o.address2, o.tel, o.name, o.coupon_id
+		FROM morder o, order_state os
+		WHERE order_id = #{value} AND o.state = os.state
 	</select>
 	
 	<select id="selectByOidMid" resultType="order" parameterType="Map">

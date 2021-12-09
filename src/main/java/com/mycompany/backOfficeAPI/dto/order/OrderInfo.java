@@ -9,7 +9,7 @@ public class OrderInfo {
 	String orderId;
 	Date orderDate;
 	String memberId;
-	char orderState;
+	String orderState;
 	int totalProduct;
 	int state1;
 	int state2;
@@ -17,5 +17,5 @@ public class OrderInfo {
 	int state4;
 	int state5;
 	int totalPrice;
-	char payType;
+	String payType;
 }

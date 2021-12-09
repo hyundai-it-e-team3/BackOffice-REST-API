@@ -8,5 +8,5 @@ import lombok.Data;
 public class OTimeline {
 	String orderId;
 	Date issueDate;
-	char state;
+	String state;
 }
