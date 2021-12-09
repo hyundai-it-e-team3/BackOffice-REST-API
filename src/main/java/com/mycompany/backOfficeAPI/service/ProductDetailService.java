@@ -1,5 +1,10 @@
 package com.mycompany.backOfficeAPI.service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
@@ -8,6 +13,8 @@ import com.mycompany.backOfficeAPI.dao.productDB.ProductDetailDAO;
 import com.mycompany.backOfficeAPI.dao.productDB.ProductImgDAO;
 import com.mycompany.backOfficeAPI.dao.productDB.StockDAO;
 import com.mycompany.backOfficeAPI.dto.product.ProductDetailDTO;
+import com.mycompany.backOfficeAPI.dto.product.StockDTO;
+import com.mycompany.backOfficeAPI.dto.product.StockDetailDTO;
 
 @Service
 public class ProductDetailService {
@@ -31,6 +38,41 @@ public class ProductDetailService {
 	
 	public int getPrice(String productDetailId) {
 		return productDetailDAO.selectPrice(productDetailId);
+	}
+
+	public List<StockDetailDTO> getProductDetailList(String searchType, String keyWord, int startRow, int endRow) {
+		Map<String,Object> map = new HashMap<>();
+		map.put("searchType",searchType);
+		map.put("keyWord",keyWord);
+		map.put("startRow",startRow);
+		map.put("endRow",endRow);
+		List<ProductDetailDTO> list = productDetailDAO.selectProductDetailBySearch(map);
+		
+		
+		List<StockDetailDTO> stockList = new ArrayList<>();
+		for(ProductDetailDTO productDetailDTO: list) {
+			productDetailDTO.setStockList(stockDAO.selectByProductDetailId(productDetailDTO.getProductDetailId()));
+			
+			for(StockDTO stock: productDetailDTO.getStockList()) {
+				StockDetailDTO stockDetail = new StockDetailDTO();
+				stockDetail.setProductId(productDetailDTO.getProductId());
+				stockDetail.setProductDetailId(productDetailDTO.getProductDetailId());
+				stockDetail.setBrandName(productDetailDTO.getBrandName());
+				stockDetail.setName(productDetailDTO.getName());
+				stockDetail.setPsize(stock.getPsize());
+				stockDetail.setAmount(stock.getAmount());
+				stockList.add(stockDetail);
+			}
+		}
+		
+		return stockList;
+	}
+
+	public int getTotalProductDetail(String searchType, String keyWord) {
+		Map<String,String> map = new HashMap<>();
+		map.put("searchType",searchType);
+		map.put("keyWord",keyWord);
+		return productDetailDAO.selectTotalProductDetailBySearch(map);
 	}
 
 }

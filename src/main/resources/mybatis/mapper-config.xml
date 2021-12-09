@@ -27,6 +27,7 @@
 		<typeAlias type="com.mycompany.backOfficeAPI.dto.product.ProductCategoryDTO" alias="productCategory"/>
 		<typeAlias type="com.mycompany.backOfficeAPI.dto.product.ProductDetailDTO" alias="productDetail"/>
 		<typeAlias type="com.mycompany.backOfficeAPI.dto.product.ProductDTO" alias="product"/>
+		<typeAlias type="com.mycompany.backOfficeAPI.dto.product.ProductSearchDTO" alias="productSearch"/>
 		<typeAlias type="com.mycompany.backOfficeAPI.dto.product.ProductImgDTO" alias="productImg"/>
 		<typeAlias type="com.mycompany.backOfficeAPI.dto.product.StockDTO" alias="stock"/>
 		

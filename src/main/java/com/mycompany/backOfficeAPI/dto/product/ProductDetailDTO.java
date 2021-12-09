@@ -11,6 +11,8 @@ public class ProductDetailDTO {
 	private String colorCode;
 	private String colorChip;
 	private String productId;
+	private String name;
+	private String brandName;
 	private List<ProductImgDTO> imgList;
 	private List<ProductImgDTO> withImgList;
 	private List<StockDTO> stockList;

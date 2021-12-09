@@ -15,6 +15,12 @@
 	</select>
 	
 	
+	<select id="selectProductDetailBySearch" parameterType="string" resultType="stock">
+		SELECT psize, amount, product_detail_id 
+		FROM stock 
+		WHERE product_detail_id = #{productDetailId} order by psize
+	</select>
+	
 	<update id="updateMinusByStockDTO" parameterType="stock">
 		UPDATE stock SET amount = amount - #{amount} WHERE product_detail_id = #{productDetailId} and psize = #{psize}
 	</update>	

@@ -21,4 +21,6 @@ public interface CategoryDAO {
 
 	public List<CategoryDTO> selectAllCategory();
 
+	public CategoryDTO selectCategoryById(String categoryId);
+
 }

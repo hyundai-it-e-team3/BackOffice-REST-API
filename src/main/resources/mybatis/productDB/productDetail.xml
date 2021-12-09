@@ -19,6 +19,44 @@
 		FROM product_detail a, product b
 		WHERE a.product_id = b.product_id and a.product_detail_id = #{productDetailId}
 	</select>
+	
+	<select id="selectTotalProductDetailBySearch" parameterType="map" resultType="int">
+		SELECT count(*)
+		FROM product_detail b, product a, stock c
+		WHERE 
+		a.product_id = b.product_id AND
+		b.product_detail_id = c.product_detail_id AND
+		<if test="searchType == 'None' ">
+			(a.product_id like '%'||#{keyWord}||'%' 
+				OR a.name like '%'||#{keyWord}||'%'
+				OR a.brand_name like '%'||#{keyWord}||'%')
+		</if>
+		<if test="searchType != 'None' ">
+			a.${searchType} like '%'||#{keyWord}||'%'
+		</if>
+	</select>
+	
+	
+	<select id="selectProductDetailBySearch" parameterType="map" resultType="productDetail">
+	
+		SELECT rnum , product_id, name, brand_name, product_detail_id
+		FROM(SELECT rownum as rnum, product_id, name, brand_name, product_detail_id
+		FROM(SELECT a.product_id, a.name, a.brand_name, b.product_detail_id
+		FROM product_detail b, product a
+		WHERE 
+		a.product_id = b.product_id AND
+		<if test="searchType == 'None' ">
+			(a.product_id like '%'||#{keyWord}||'%' 
+				OR a.name like '%'||#{keyWord}||'%'
+				OR a.brand_name like '%'||#{keyWord}||'%')
+		</if>
+		<if test="searchType != 'None' ">
+			a.${searchType} like '%'||#{keyWord}||'%'
+		</if>
+		
+		order by b.product_detail_id
+		)c where <![CDATA[rownum<=#{endRow}]]> ) d where  <![CDATA[rnum>= #{startRow}]]> 
+	</select>
 </mapper>
 
 

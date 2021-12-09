@@ -1,5 +1,6 @@
 package com.mycompany.backOfficeAPI.service;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -9,12 +10,15 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
+import com.mycompany.backOfficeAPI.dao.productDB.CategoryDAO;
 import com.mycompany.backOfficeAPI.dao.productDB.ProductDAO;
 import com.mycompany.backOfficeAPI.dao.productDB.ProductDetailDAO;
 import com.mycompany.backOfficeAPI.dao.productDB.ProductImgDAO;
 import com.mycompany.backOfficeAPI.dao.productDB.StockDAO;
+import com.mycompany.backOfficeAPI.dto.product.CategoryDTO;
 import com.mycompany.backOfficeAPI.dto.product.ProductDTO;
 import com.mycompany.backOfficeAPI.dto.product.ProductDetailDTO;
+import com.mycompany.backOfficeAPI.dto.product.ProductSearchDTO;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -32,6 +36,9 @@ public class ProductService {
 	private StockDAO stockDAO;
 	
 	@Resource
+	private CategoryDAO categoryDAO;
+	
+	@Resource
 	private ProductImgDAO productImgDAO;
 	
 	public ProductDTO getProduct(String productId) {
@@ -40,6 +47,16 @@ public class ProductService {
 		
 		ProductDTO productDTO = productDAO.selectByProductId(productId);
 		log.info(productId);
+		
+		
+		CategoryDTO categoryDTO = new CategoryDTO();
+		categoryDTO.setParentCategoryId(productDTO.getParentCategoryId());
+		productDTO.setCategoryList(new ArrayList<>());
+		for(int i = productDTO.getClevel(); i>1; i--) {
+				categoryDTO = categoryDAO.selectCategoryById(categoryDTO.getParentCategoryId());
+				productDTO.getCategoryList().add(0,categoryDTO.getName());
+		}
+		productDTO.getCategoryList().add(productDTO.getCategoryName());
 		productDTO.setProductDetailList(productDetailDAO.selectAllByProductId(productId));
 		
 		for(ProductDetailDTO productDetail: productDTO.getProductDetailList()) {
@@ -148,13 +165,30 @@ public class ProductService {
 		return productDAO.selectCountByText(text);
 	}
 
-	public ProductDTO getCartProductDetail(String productDetailId) {
-		String productId = productDetailId.substring(0, productDetailId.length()-3);
-		ProductDTO productDTO = productDAO.selectByProductId(productId);
-		productDTO.setProductDetail(productDetailDAO.selectByProductDetailId(productDetailId));
-		productDTO.getProductDetail().setStockList(stockDAO.selectByProductDetailId(productDTO.getProductDetail().getProductDetailId()));
-		productDTO.getProductDetail().setImgList(productImgDAO.selectByProductDetailId(productDTO.getProductDetail().getProductDetailId()));
-		productDTO.getProductDetail().setWithImgList(productImgDAO.selectByProductDetailId(productDTO.getProductDetail().getWithProduct()));
-		return productDTO;
+
+	public List<ProductDTO> getProductList(ProductSearchDTO productSearchDTO) {
+		
+		log.info(productSearchDTO.toString());
+		
+		List<ProductDTO> productList = productDAO.selectProductListBySearch(productSearchDTO);
+		
+		log.info(productList.toString());
+		
+		for(ProductDTO productDTO: productList) {
+			CategoryDTO categoryDTO = new CategoryDTO();
+			categoryDTO.setParentCategoryId(productDTO.getParentCategoryId());
+			productDTO.setCategoryList(new ArrayList<>());
+			for(int i = productDTO.getClevel(); i>1; i--) {
+				categoryDTO = categoryDAO.selectCategoryById(categoryDTO.getParentCategoryId());
+				log.info(categoryDTO.toString());
+				productDTO.getCategoryList().add(0,categoryDTO.getName());
+			}
+			productDTO.getCategoryList().add(productDTO.getCategoryName());
+		}
+		return productList;
+	}
+
+	public int getTotalProductNum(ProductSearchDTO productSearchDTO) {
+		return productDAO.selectProductListCountBySearch(productSearchDTO);
 	}
 }

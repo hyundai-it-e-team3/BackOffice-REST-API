@@ -1,16 +1,23 @@
 package com.mycompany.backOfficeAPI.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mycompany.backOfficeAPI.dto.product.PagerDTO;
+import com.mycompany.backOfficeAPI.dto.product.ProductDetailDTO;
 import com.mycompany.backOfficeAPI.dto.product.StockDTO;
+import com.mycompany.backOfficeAPI.service.ProductDetailService;
 import com.mycompany.backOfficeAPI.service.StockService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -45,4 +52,5 @@ public class StockController {
 		
 		return mp;
 	}
+	
 }
