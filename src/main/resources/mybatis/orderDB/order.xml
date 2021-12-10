@@ -28,11 +28,31 @@
 	</update>
 	
 	<select id="selectOrderList" resultType="orderInfo">
-		SELECT o.order_id, o.order_date, o.member_id, o.order_state, od.total_product, od.state1, od.state2, od.state3, od.state4, od.state5, p.total_price, p.pay_type
+		SELECT o.order_id, o.order_date, o.member_id, o.order_state, od.total_product, od.state1, od.state2, od.state3, od.state4, od.state5, od.state6, p.total_price, p.pay_type
 		FROM order_view o, orderdetail_view od, payment_view p
 		WHERE o.order_id = od.order_id 
 		AND p.order_id = od.order_id
 		ORDER BY order_date DESC
+	</select>
+	
+	<select id="selectByPage" parameterType="pager"  resultType="orderInfo">
+       SELECT o.order_id, o.order_date, o.member_id, o.order_state, od.total_product, od.state1, od.state2, od.state3, od.state4, od.state5, od.state6, p.total_price, p.pay_type
+            FROM (
+                SELECT rnum, order_id, order_date, member_id, order_state
+                FROM (
+                    SELECT ROWNUM as rnum,  order_id, order_date, member_id, order_state
+                    FROM order_view
+                     WHERE rownum &lt;= #{endRowNo}  
+                    ORDER BY order_date DESC
+                )
+                WHERE rnum &gt;= #{startRowNo}
+            ) o, orderdetail_view od, payment_view p
+        WHERE o.order_id = od.order_id 
+		AND o.order_id = p.order_id
+	</select>
+
+	<select id="count" resultType="int">
+		SELECT count(*) FROM morder
 	</select>
 </mapper>
 

@@ -18,6 +18,7 @@ import com.mycompany.backOfficeAPI.dao.orderDB.OrderDetailDao;
 import com.mycompany.backOfficeAPI.dao.orderDB.PTimelineDao;
 import com.mycompany.backOfficeAPI.dao.orderDB.PaymentDao;
 import com.mycompany.backOfficeAPI.dao.productDB.ProductDAO;
+import com.mycompany.backOfficeAPI.dto.Pager;
 import com.mycompany.backOfficeAPI.dto.order.Order;
 import com.mycompany.backOfficeAPI.dto.order.OrderDetail;
 import com.mycompany.backOfficeAPI.dto.order.OrderInfo;
@@ -65,7 +66,6 @@ public class OrderService {
 			map.put("result", "fail");
 		} else {
 			map.put("result", "success");
-			
 			
 			List<OrderDetail> odList = orderDetailDao.selectByOid(orderId);
 			List<OrderDetail> orderDetails = new ArrayList<OrderDetail>();
@@ -152,8 +152,12 @@ public class OrderService {
 		return orderDetailDao.selectByOid(orderId);
 	}
 	
-	public List<OrderInfo> getOrderInfoList() {
-		return orderDao.selectOrderList();
+	public List<OrderInfo> getOrderInfoList(Pager pager) {
+		return orderDao.selectByPage(pager);
+	}
+	
+	public int getTotalOrderNum() {
+		return orderDao.count();
 	}
 
 }
