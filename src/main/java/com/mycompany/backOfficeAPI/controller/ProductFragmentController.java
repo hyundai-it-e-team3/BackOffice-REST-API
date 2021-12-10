@@ -35,10 +35,10 @@ public class ProductFragmentController {
 	
 	
 	@GetMapping("/stockList")
-	public String getStockList(@RequestParam String searchType, @RequestParam String keyWord, @RequestParam int pageNo, Model model) {
+	public String getStockList(@RequestParam String searchType, @RequestParam String keyWord, @RequestParam String sortId,@RequestParam int pageNo, Model model) {
 		int totalRows = productDetailService.getTotalProductDetail(searchType,keyWord);
 		PagerDTO pagerDTO = new PagerDTO(10, 5, totalRows, pageNo);
-		List<StockDetailDTO> list = productDetailService.getProductDetailList(searchType,keyWord,pagerDTO.getStartRowNo(),pagerDTO.getEndRowNo());
+		List<StockDetailDTO> list = productDetailService.getProductDetailList(searchType,keyWord,pagerDTO.getStartRowNo(),pagerDTO.getEndRowNo(),sortId);
 		model.addAttribute("pager", pagerDTO);
 		model.addAttribute("stockList", list);
 		return "/product/stockListFragment";
