@@ -50,7 +50,7 @@
 				    		</if>
 				    		
 				    		
-				    		b.category_id like '%'||#{categoryId}||'%' order by category_id)d where <![CDATA[rownum<=#{endRow}]]> ) e where  <![CDATA[rnum>= #{startRow}]]>  
+				    		b.category_id like '%'||#{categoryId}||'%' order by ${sortId}) d where <![CDATA[rownum<=#{endRow}]]> ) e where  <![CDATA[rnum>= #{startRow}]]>  
 	</select>
 	
 	

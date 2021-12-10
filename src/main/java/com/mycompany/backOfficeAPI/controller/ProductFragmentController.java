@@ -55,6 +55,7 @@ public class ProductFragmentController {
 		productSearchDTO.setRegStart(map.get("regStart"));
 		productSearchDTO.setRegEnd(map.get("regEnd"));
 		productSearchDTO.setStatus(map.get("status"));
+		productSearchDTO.setSortId(map.get("sortId"));
 		
 		int pageNo = Integer.parseInt(map.get("pageNo"));
 		

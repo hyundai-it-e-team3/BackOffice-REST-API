@@ -10,6 +10,7 @@ public class ProductSearchDTO {
 	private String regStart;
 	private String regEnd;
 	private String status;
+	private String sortId;
 	private int startRow;
 	private int endRow;
 }
