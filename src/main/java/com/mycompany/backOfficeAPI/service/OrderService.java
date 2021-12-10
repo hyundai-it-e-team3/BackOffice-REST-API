@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.StringTokenizer;
 
 import javax.annotation.Resource;
+import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
 
@@ -117,10 +118,22 @@ public class OrderService {
 		return orderDetailDao.selectByOid(orderId);
 	}
 	
+	@Transactional
 	public void updateState(OrderDetail orderDetail) {
 		log.info("실행");
 		orderDetailDao.updateState(orderDetail);
 		odTimelineDao.insert(orderDetail);
+		String state =  orderDetail.getState();
+		Order order = new Order();
+		order.setOrderId(orderDetail.getOrderId());
+		switch(state) {
+			case "6":
+				order.setState("0");
+				break;
+			default :
+				order.setState("2");
+		}
+		orderDao.updateState(order);
 	}
 	
 	public List<Payment> getPayments(String orderId) {
