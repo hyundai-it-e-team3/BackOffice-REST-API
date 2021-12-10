@@ -16,7 +16,10 @@ import com.mycompany.backOfficeAPI.dto.product.ProductDetailDTO;
 import com.mycompany.backOfficeAPI.dto.product.StockDTO;
 import com.mycompany.backOfficeAPI.dto.product.StockDetailDTO;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class ProductDetailService {
 
 	@Resource
@@ -40,12 +43,15 @@ public class ProductDetailService {
 		return productDetailDAO.selectPrice(productDetailId);
 	}
 
-	public List<StockDetailDTO> getProductDetailList(String searchType, String keyWord, int startRow, int endRow) {
+	public List<StockDetailDTO> getProductDetailList(String searchType, String keyWord, int startRow, int endRow, String sortId) {
 		Map<String,Object> map = new HashMap<>();
 		map.put("searchType",searchType);
 		map.put("keyWord",keyWord);
 		map.put("startRow",startRow);
 		map.put("endRow",endRow);
+		map.put("sortId",sortId);
+		
+		log.info(sortId);
 		List<ProductDetailDTO> list = productDetailDAO.selectProductDetailBySearch(map);
 		
 		
