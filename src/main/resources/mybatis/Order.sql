@@ -6,7 +6,8 @@ CREATE OR REPLACE VIEW orderDetail_view AS
                 count ( CASE WHEN state = '2' THEN order_id END ) STATE2,
                 count ( CASE WHEN state = '3' THEN order_id END ) STATE3,
                 count ( CASE WHEN state = '4' THEN order_id END ) STATE4,
-                count ( CASE WHEN state = '5' THEN order_id END ) STATE5
+                count ( CASE WHEN state = '5' THEN order_id END ) STATE5,
+	    count ( CASE WHEN state = '6' THEN order_id END ) STATE6
     FROM order_detail
     GROUP BY order_id ;
 
