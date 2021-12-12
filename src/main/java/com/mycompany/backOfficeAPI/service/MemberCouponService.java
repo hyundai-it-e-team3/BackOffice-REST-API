@@ -7,6 +7,7 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import com.mycompany.backOfficeAPI.dao.memberDB.MemberCouponDao;
+import com.mycompany.backOfficeAPI.dto.Pager;
 import com.mycompany.backOfficeAPI.dto.member.MemberCoupon;
 
 import lombok.extern.slf4j.Slf4j;
@@ -23,8 +24,12 @@ public class MemberCouponService {
 	@Resource
 	private MemberCouponDao memberCouponDao;
 	
-	public List<MemberCoupon> getMemberCoupon(String memberId) {
-		return memberCouponDao.getMemberCoupon(memberId);
+	public List<MemberCoupon> getMemberCouponByPage(String memberId, Pager pager) {
+		return memberCouponDao.getMemberCouponByPage(memberId, pager);
+	}
+	
+	public int getTotalMemberCouponNum(String memberId) {
+		return memberCouponDao.getTotalMemberCouponNum(memberId);
 	}
 	
 	public InsertMemberCouponResult insertMemberCoupon(MemberCoupon memberCoupon) {

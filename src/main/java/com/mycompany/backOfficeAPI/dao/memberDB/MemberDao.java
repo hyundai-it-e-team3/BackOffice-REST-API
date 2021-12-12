@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.mycompany.backOfficeAPI.dto.Pager;
 import com.mycompany.backOfficeAPI.dto.member.Member;
 import com.mycompany.backOfficeAPI.dto.member.MemberForOrder;
 
@@ -11,6 +12,7 @@ import com.mycompany.backOfficeAPI.dto.member.MemberForOrder;
 public interface MemberDao {
 	public void updateLastLoginDate(String memberId);
 	public Member getMember(String memberId);
-	public List<Member> getAllMember();
+	public int getTotalMemberNum();
+	public List<Member> getAllMemberByPage(Pager pager);
 	public MemberForOrder getMemberForOrder(String memberId);
 }

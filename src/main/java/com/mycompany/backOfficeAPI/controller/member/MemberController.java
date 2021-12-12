@@ -18,10 +18,13 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mycompany.backOfficeAPI.dto.Pager;
 import com.mycompany.backOfficeAPI.dto.member.Member;
 import com.mycompany.backOfficeAPI.dto.member.MemberForOrder;
+import com.mycompany.backOfficeAPI.dto.member.PagerAndMember;
 import com.mycompany.backOfficeAPI.security.JwtUtil;
 import com.mycompany.backOfficeAPI.service.MemberService;
 
@@ -77,9 +80,19 @@ public class MemberController {
 	}
 	
 	@GetMapping
-	public List<Member> getAllMember() {
+	public PagerAndMember getAllMemberByPage(@RequestParam(defaultValue="1") int pageNo) {
 		log.info("전체 회원정보 조회");
-		return memberService.getAllMember();
+		
+		int totalRows = memberService.getTotalMemberNum();
+		Pager pager = new Pager(5, 5, totalRows, pageNo);
+		
+		List<Member> memberList = memberService.getAllMemberByPage(pager);
+
+		PagerAndMember data = new PagerAndMember();
+		data.setPager(pager);
+		data.setMember(memberList);
+		
+		return data;
 	}
 	
 	@GetMapping("/order")

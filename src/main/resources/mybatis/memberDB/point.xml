@@ -2,10 +2,24 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.mycompany.backOfficeAPI.dao.memberDB.PointDao">
-	<select id="getPointList" parameterType="String" resultType="point">
-		SELECT *
+	<select id="getTotalPointNum" parameterType="String" resultType="int">
+		SELECT count(*)
 		FROM point
 		WHERE member_id = #{memberId}
-		ORDER BY point_seq
+	</select>
+
+	<select id="getPointListByPage" resultType="point">
+		SELECT rownum, point_seq, member_id, order_id, type, point, reg_date
+		FROM (
+			SELECT rownum, point_seq, member_id, order_id, type, point, reg_date
+			FROM (
+				SELECT *
+				FROM point
+				WHERE member_id = #{memberId}
+				ORDER BY point_seq DESC
+			)
+			WHERE rownum &lt;= #{pager.endRowNo}
+		)
+		WHERE rownum &gt;= #{pager.startRowNo}
 	</select>
 </mapper>
