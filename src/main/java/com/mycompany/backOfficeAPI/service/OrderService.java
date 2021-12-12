@@ -142,5 +142,9 @@ public class OrderService {
 	public List<OrderInfo> getOrderInfoList() {
 		return orderDao.selectOrderList();
 	}
+	
+	public List<OrderInfo> selectMemberOrderList(String memberId) {
+		return orderDao.selectMemberOrderList(memberId);
+	}
 
 }

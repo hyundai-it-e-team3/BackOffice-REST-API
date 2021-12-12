@@ -1,4 +1,4 @@
-package com.mycompany.backOfficeAPI.controller;
+package com.mycompany.backOfficeAPI.controller.member;
 
 import java.util.List;
 

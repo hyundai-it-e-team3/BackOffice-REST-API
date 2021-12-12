@@ -113,4 +113,11 @@ public class OrderController{
 		List<OrderInfo> list = orderService.getOrderInfoList();
 		return list;
 	}
+	
+	@GetMapping("/infolist/{memberId}")
+	public List<OrderInfo> selectMemberOrderList(@PathVariable String memberId) {
+		log.info("회원별 주문내역 조회 실행");
+		List<OrderInfo> list = orderService.selectMemberOrderList(memberId);
+		return list;
+	}
 }
