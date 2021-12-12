@@ -42,7 +42,7 @@
 		<typeAlias type="com.mycompany.backOfficeAPI.dto.order.OrderInfo" alias="orderInfo"/>
 		
 		
-		
+		<typeAlias type="com.mycompany.backOfficeAPI.dto.Pager" alias="pager"/>
 	</typeAliases>
 </configuration>
 

@@ -54,7 +54,7 @@
 			a.${searchType} like '%'||#{keyWord}||'%'
 		</if>
 		
-		order by b.product_detail_id
+		order by ${sortId}
 		)c where <![CDATA[rownum<=#{endRow}]]> ) d where  <![CDATA[rnum>= #{startRow}]]> 
 	</select>
 </mapper>

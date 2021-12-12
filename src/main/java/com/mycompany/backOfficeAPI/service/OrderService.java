@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.StringTokenizer;
 
 import javax.annotation.Resource;
+import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,7 @@ import com.mycompany.backOfficeAPI.dao.orderDB.OrderDetailDao;
 import com.mycompany.backOfficeAPI.dao.orderDB.PTimelineDao;
 import com.mycompany.backOfficeAPI.dao.orderDB.PaymentDao;
 import com.mycompany.backOfficeAPI.dao.productDB.ProductDAO;
+import com.mycompany.backOfficeAPI.dto.Pager;
 import com.mycompany.backOfficeAPI.dto.order.Order;
 import com.mycompany.backOfficeAPI.dto.order.OrderDetail;
 import com.mycompany.backOfficeAPI.dto.order.OrderInfo;
@@ -64,7 +66,6 @@ public class OrderService {
 			map.put("result", "fail");
 		} else {
 			map.put("result", "success");
-			
 			
 			List<OrderDetail> odList = orderDetailDao.selectByOid(orderId);
 			List<OrderDetail> orderDetails = new ArrayList<OrderDetail>();
@@ -117,10 +118,22 @@ public class OrderService {
 		return orderDetailDao.selectByOid(orderId);
 	}
 	
+	@Transactional
 	public void updateState(OrderDetail orderDetail) {
 		log.info("실행");
 		orderDetailDao.updateState(orderDetail);
 		odTimelineDao.insert(orderDetail);
+		String state =  orderDetail.getState();
+		Order order = new Order();
+		order.setOrderId(orderDetail.getOrderId());
+		switch(state) {
+			case "6":
+				order.setState("0");
+				break;
+			default :
+				order.setState("2");
+		}
+		orderDao.updateState(order);
 	}
 	
 	public List<Payment> getPayments(String orderId) {
@@ -139,8 +152,12 @@ public class OrderService {
 		return orderDetailDao.selectByOid(orderId);
 	}
 	
-	public List<OrderInfo> getOrderInfoList() {
-		return orderDao.selectOrderList();
+	public List<OrderInfo> getOrderInfoList(Pager pager) {
+		return orderDao.selectByPage(pager);
+	}
+	
+	public int getTotalOrderNum() {
+		return orderDao.count();
 	}
 	
 	public List<OrderInfo> selectMemberOrderList(String memberId) {
