@@ -7,6 +7,7 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import com.mycompany.backOfficeAPI.dao.memberDB.MemberDao;
+import com.mycompany.backOfficeAPI.dto.Pager;
 import com.mycompany.backOfficeAPI.dto.member.Member;
 import com.mycompany.backOfficeAPI.dto.member.MemberForOrder;
 
@@ -26,8 +27,13 @@ public class MemberService {
 	}
 	
 	//회원정보 조회
-	public List<Member> getAllMember() {
-		return memberDao.getAllMember();
+	public List<Member> getAllMemberByPage(Pager pager) {
+		return memberDao.getAllMemberByPage(pager);
+	}
+	
+	//회원정보 전체 행 수 조회
+	public int getTotalMemberNum() {
+		return memberDao.getTotalMemberNum();
 	}
 	
 	//전체 회원정보 조회

@@ -10,9 +10,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mycompany.backOfficeAPI.dto.Pager;
 import com.mycompany.backOfficeAPI.dto.member.MemberCoupon;
+import com.mycompany.backOfficeAPI.dto.member.PagerAndMemberCoupon;
 import com.mycompany.backOfficeAPI.service.MemberCouponService;
 import com.mycompany.backOfficeAPI.service.MemberCouponService.InsertMemberCouponResult;
 
@@ -27,9 +30,19 @@ public class MemberCouponContoller {
 	private MemberCouponService memberCouponService;
 	
 	@GetMapping("/list/{memberId}")
-	public List<MemberCoupon> getMemberCoupon(@PathVariable String memberId) {
+	public PagerAndMemberCoupon getMemberCoupon(@RequestParam(defaultValue="1") int pageNo, @PathVariable String memberId) {
 		log.info("쿠폰 목록 조회 실행");
-		return memberCouponService.getMemberCoupon(memberId);
+		
+		int totalRows = memberCouponService.getTotalMemberCouponNum(memberId);
+		Pager pager = new Pager(5, 5, totalRows, pageNo);
+		
+		List<MemberCoupon> couponList = memberCouponService.getMemberCouponByPage(memberId, pager);
+		
+		PagerAndMemberCoupon data = new PagerAndMemberCoupon();
+		data.setPager(pager);
+		data.setMemberCoupon(couponList);
+		
+		return data;
 	}
 	
 	@PostMapping

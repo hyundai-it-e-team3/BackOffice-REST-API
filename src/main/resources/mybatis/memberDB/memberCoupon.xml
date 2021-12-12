@@ -2,8 +2,24 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.mycompany.backOfficeAPI.dao.memberDB.MemberCouponDao">
-	<select id="getMemberCoupon" parameterType="String" resultType="memberCoupon">
-		SELECT mc.member_id, mc.coupon_id, mc.reg_date, mc.exp_date, mc.status, c.name, c.amount, c.type, c.content
+	<select id="getMemberCouponByPage" resultType="memberCoupon">
+		SELECT rownum, member_id, coupon_id, reg_date, exp_date, status, name, amount, type, content
+		FROM (
+			SELECT rownum, member_id, coupon_id, reg_date, exp_date, status, name, amount, type, content
+			FROM (
+				SELECT mc.member_id, mc.coupon_id, mc.reg_date, mc.exp_date, mc.status, c.name, c.amount, c.type, c.content
+				FROM member_coupon mc, coupon c
+				WHERE mc.coupon_id = c.coupon_id
+				AND member_id = #{memberId}
+				ORDER BY mc.reg_date
+			)
+			WHERE rownum &lt;= #{pager.endRowNo}
+		)
+		WHERE rownum &gt;= #{pager.startRowNo}
+	</select>
+	
+	<select id="getTotalMemberCouponNum" parameterType="String" resultType="int">
+		SELECT count(*)
 		FROM member_coupon mc, coupon c
 		WHERE mc.coupon_id = c.coupon_id
 		AND member_id = #{memberId}
