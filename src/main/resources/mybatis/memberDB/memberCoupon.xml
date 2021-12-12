@@ -3,7 +3,7 @@
 
 <mapper namespace="com.mycompany.backOfficeAPI.dao.memberDB.MemberCouponDao">
 	<select id="getMemberCoupon" parameterType="String" resultType="memberCoupon">
-		SELECT mc.coupon_id, mc.reg_date, mc.exp_date, mc.status, c.name, c.amount, c.type, c.content
+		SELECT mc.member_id, mc.coupon_id, mc.reg_date, mc.exp_date, mc.status, c.name, c.amount, c.type, c.content
 		FROM member_coupon mc, coupon c
 		WHERE mc.coupon_id = c.coupon_id
 		AND member_id = #{memberId}

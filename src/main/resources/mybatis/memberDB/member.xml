@@ -2,36 +2,25 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.mycompany.backOfficeAPI.dao.memberDB.MemberDao">
-	<select id="getMember" parameterType="String" resultType="member">
-		SELECT *
-		FROM member
-		WHERE member_id = #{memberId}
-	</select>
-
-	<insert id="insertMember" parameterType="member">
-		INSERT INTO member (member_id, password, name, nickname, email, tel, birthday, member_level, member_role, status, last_login_date, point)
-		VALUES (#{memberId}, #{password}, #{name}, #{nickname}, #{email}, #{tel}, to_date(#{birthday}, 'yymmdd'), '1', #{memberRole}, '1', sysdate, 0)
-	</insert>
-	
-	<update id="deleteMember" parameterType="String">
-		UPDATE member
-		SET status = '0'
-		WHERE member_id = #{memberId}
-	</update>
-	
 	<update id="updateLastLoginDate" parameterType="String">
 		UPDATE member
 		SET last_login_date = sysdate
 		WHERE member_id = #{memberId}
 	</update>
 	
-	<update id="updateMember" parameterType="member">
-		UPDATE member
-		SET password = #{password},
-			nickname = #{nickname},
-			tel = #{tel}
+	<select id="getMember" parameterType="String" resultType="member">
+		SELECT *
+		FROM member
 		WHERE member_id = #{memberId}
-	</update>
+	</select>
+	
+	<select id="getAllMember" resultType="member">
+		SELECT * 
+		FROM member m, address a
+		WHERE m.member_id = a.member_id(+)
+		AND m.member_role = 'ROLE_USER'
+		AND (a.default_address = '1' OR a.default_address IS NULL)
+	</select>
 	
 	<select id="getMemberForOrder" parameterType="String" resultType="memberfororder">
 		SELECT m.name orderName, m.tel orderTel, a.name deliveryName, a.tel deliveryTel, a.zip_code, a.address1, a.address2
@@ -40,22 +29,4 @@
 		AND m.member_id = #{memberId}
 		AND a.default_address = '1'
 	</select>
-	
-	<update id="updatePointBalance" parameterType="member">
-		UPDATE member
-		SET point = (SELECT point FROM member WHERE member_id = #{memberId}) + #{point}
-		WHERE member_id = #{memberId}
-	</update>
-	
-	<select id="getMemberPoint" parameterType="String" resultType="int">
-		SELECT point
-		FROM member
-		WHERE member_id = #{memberId}
-	</select>
-	
-	<update id="updateAccountPassword" parameterType="member">
-		UPDATE member 
-		SET oneclickpay_password = #{oneclickpayPassword}
-		WHERE member_id = #{memberId}
-	</update>
 </mapper>

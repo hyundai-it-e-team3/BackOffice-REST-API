@@ -1,6 +1,7 @@
-package com.mycompany.backOfficeAPI.controller;
+package com.mycompany.backOfficeAPI.controller.member;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -15,7 +16,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,7 +24,6 @@ import com.mycompany.backOfficeAPI.dto.member.Member;
 import com.mycompany.backOfficeAPI.dto.member.MemberForOrder;
 import com.mycompany.backOfficeAPI.security.JwtUtil;
 import com.mycompany.backOfficeAPI.service.MemberService;
-import com.mycompany.backOfficeAPI.service.MemberService.JoinResult;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -41,39 +40,6 @@ public class MemberController {
 	
 	@Resource
 	private AuthenticationManager authenticationManager;
-	
-	@PostMapping("/join")
-	public String joinMember(@RequestBody Member member) {
-		log.info("회원가입 실행");
-		
-		//비밀번호 암호화
-		member.setPassword(passwordEncoder.encode(member.getPassword()));
-		//회원 권한 부여
-		member.setMemberRole("ROLE_USER");
-		
-		//중복 가입 여부에 따른 처리 결과 반환
-		JoinResult jr = memberService.joinMember(member);
-		
-		String result;
-		if(jr == JoinResult.SUCCESS) {
-			result = "success";
-			log.info("회원가입 성공");
-		} else if(jr == JoinResult.DUPLICATE) {
-			result = "duplicate";
-			log.info("중복된 아이디");
-		} else {
-			result = "fail";
-			log.info("회원가입 실패");
-		}
-		
-		return result;
-	}
-	
-	@PatchMapping("/delete/{memberId}")
-	public void deleteMember(@PathVariable String memberId) {
-		log.info("회원탈퇴 실행");
-		memberService.deleteMember(memberId);
-	}
 	
 	@PatchMapping("/login")
 	public Map<String, String> login(@RequestBody Member member) {
@@ -110,22 +76,16 @@ public class MemberController {
 		return memberService.getMember(memberId);
 	}
 	
-	@PatchMapping
-	public void updateMember(@RequestBody Member member) {
-		log.info("회원정보 수정");
-		memberService.updateMember(member);
+	@GetMapping
+	public List<Member> getAllMember() {
+		log.info("전체 회원정보 조회");
+		return memberService.getAllMember();
 	}
 	
 	@GetMapping("/order")
 	public MemberForOrder getMemberForOrder(@RequestBody String memberId) {
 		log.info("주문을 위한 회원정보 조회");
 		return memberService.getMemberForOrder(memberId);
-	}
-	
-	@PostMapping("/oneclickpayPassword")
-	public void updateAccountPassword(@RequestBody Member member) {
-		log.info("원클릭페이 결제 비밀번호 설정 실행");
-		memberService.updateAccountPassword(member);
 	}
 	
 }

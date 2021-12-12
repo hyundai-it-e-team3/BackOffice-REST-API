@@ -159,5 +159,9 @@ public class OrderService {
 	public int getTotalOrderNum() {
 		return orderDao.count();
 	}
+	
+	public List<OrderInfo> selectMemberOrderList(String memberId) {
+		return orderDao.selectMemberOrderList(memberId);
+	}
 
 }

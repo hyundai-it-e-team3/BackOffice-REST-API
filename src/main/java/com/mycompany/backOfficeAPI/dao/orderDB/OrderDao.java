@@ -15,10 +15,9 @@ public interface OrderDao {
 	public Order selectByOid(String orderId);
 	public Order selectByOidMid(String orderId, String memberId);
 	public List<OrderInfo> selectOrderList();
-	
+	public List<OrderInfo> selectMemberOrderList(String memberId);
 	
 	//Pagination
 	public List<OrderInfo> selectByPage(Pager pager);
 	public int count();
-	
 }
