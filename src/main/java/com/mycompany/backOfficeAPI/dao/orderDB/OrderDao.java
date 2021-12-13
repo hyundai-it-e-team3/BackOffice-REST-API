@@ -21,5 +21,6 @@ public interface OrderDao {
 	public List<OrderInfo> selectByPage(Pager pager);
 	public int count();
 	
-	public List<OrderInfo> getMemberOrderListByPager(@Param(value="memberId") String memberId, @Param(value="pager") Pager pager);
+	public List<OrderInfo> getMemberOrderByPager(@Param(value="memberId") String memberId, @Param(value="pager") Pager pager);
+	public int getTotalMemberOrderNum(String memberId);
 }
