@@ -131,12 +131,13 @@ public class OrderController{
 	}
 	
 	@GetMapping("/infolist/{memberId}")
-	public PagerAndOrderInfo selectMemberOrderList(@RequestParam(defaultValue="1") int pageNo, @PathVariable String memberId) {
+	public PagerAndOrderInfo list(@PathVariable String memberId, @RequestParam(defaultValue="1") int pageNo) {
 		log.info("회원별 주문내역 조회 실행");
 		
-		int totalRows = orderService.getTotalOrderNum();
-		Pager pager = new Pager(5, 5, totalRows, pageNo);
-		List<OrderInfo> list = orderService.getMemberOrderListByPager(memberId, pager);
+		int totalRows = orderService.getTotalMemberOrderNum(memberId);
+		Pager pager = new Pager(5,5, totalRows, pageNo);
+		
+		List<OrderInfo> list = orderService.getMemberOrderByPager(memberId, pager);
 		
 		PagerAndOrderInfo data = new PagerAndOrderInfo();
 		data.setOrderInfos(list);
@@ -144,4 +145,5 @@ public class OrderController{
 		
 		return data;
 	}
+	
 }

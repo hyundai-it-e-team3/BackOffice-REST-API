@@ -160,8 +160,12 @@ public class OrderService {
 		return orderDao.count();
 	}
 	
-	public List<OrderInfo> getMemberOrderListByPager(String memberId, Pager pager) {
-		return orderDao.getMemberOrderListByPager(memberId, pager);
+	public List<OrderInfo> getMemberOrderByPager(String memberId, Pager pager) {
+		return orderDao.getMemberOrderByPager(memberId, pager);
+	}
+	
+	public int getTotalMemberOrderNum(String memberId) {
+		return orderDao.getTotalMemberOrderNum(memberId);
 	}
 
 }
