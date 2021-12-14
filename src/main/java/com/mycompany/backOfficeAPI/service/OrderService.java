@@ -179,5 +179,12 @@ public class OrderService {
 		return orderDao.countSearchMap(map);
 	}
 	
+	public List<OrderInfo> getMemberOrderByPager(String memberId, Pager pager) {
+		return orderDao.getMemberOrderByPager(memberId, pager);
+	}
+	
+	public int getTotalMemberOrderNum(String memberId) {
+		return orderDao.getTotalMemberOrderNum(memberId);
+	}
 
 }
