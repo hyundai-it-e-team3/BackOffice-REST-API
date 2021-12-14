@@ -22,6 +22,7 @@ import com.mycompany.backOfficeAPI.dto.Pager;
 import com.mycompany.backOfficeAPI.dto.order.Order;
 import com.mycompany.backOfficeAPI.dto.order.OrderDetail;
 import com.mycompany.backOfficeAPI.dto.order.OrderInfo;
+import com.mycompany.backOfficeAPI.dto.order.OrderSearch;
 import com.mycompany.backOfficeAPI.dto.order.Payment;
 import com.mycompany.backOfficeAPI.dto.product.ProductDTO;
 
@@ -156,8 +157,26 @@ public class OrderService {
 		return orderDao.selectByPage(pager);
 	}
 	
+	public List<OrderInfo> getOrderInfoList(OrderSearch orderSearch) {
+		log.info("실행");
+		return orderDao.selectBySearch(orderSearch);
+	}
+	
 	public int getTotalOrderNum() {
 		return orderDao.count();
+	}
+	
+	public int getSearchNum(OrderSearch orderSearch) {
+		return orderDao.countSearch(orderSearch);
+	}
+	
+	public List<OrderInfo> getOrderInfoList(Map<String,Object> map) {
+		log.info("실행");
+		return orderDao.selectBySearchMap(map);
+	}
+	
+	public int getSearchNum(Map<String,Object> map) {
+		return orderDao.countSearchMap(map);
 	}
 	
 	public List<OrderInfo> getMemberOrderByPager(String memberId, Pager pager) {

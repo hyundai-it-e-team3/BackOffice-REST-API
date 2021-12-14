@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"> 
+	  <div id="orderTable">
+	    <table class="table table-bordered table-sm">
+	      <thead class="text-center">
+	        <tr>
+	          <th scope="col">주문일자</th>
+	          <th scope="col">주문번호</th>
+	          <th scope="col">주문자 ID</th>
+	          <th scope="col">결제 금액</th>
+	          <th scope="col">결제 수단</th>
+	          <th scope="col">주문상태</th>
+	          <th scope="col">전체</th>
+	          <th scope="col">출고대기</th>
+	          <th scope="col">배송준비</th>
+	          <th scope="col">배송중</th>
+	          <th scope="col">배송완료</th>
+	          <th scope="col">교환</th>
+	          <th scope="col">환불</th>
+	        </tr>
+	      </thead>
+	      <tbody class="text-center">
+	        <tr th:each="orderInfo : ${orderList}">
+	          <td>[[${orderInfo.orderDate}]]</td>
+	          <td><a  th:href="@{orderDetail(oid=${orderInfo.orderId})}">[[${orderInfo.orderId}]]</a></td>
+	          <td>[[${orderInfo.memberId}]]</td>
+	          <td>[[${orderInfo.totalPrice}]]</td>
+	          <td>[[${orderInfo.payType}]]</td>
+	          <td>[[${orderInfo.orderState}]]</td>
+	          <td>[[${orderInfo.totalProduct}]]</td>
+	          <td>[[${orderInfo.state1}]]</td>
+	          <td>[[${orderInfo.state2}]]</td>
+	          <td>[[${orderInfo.state3}]]</td>
+	          <td>[[${orderInfo.state4}]]</td>
+	          <td>[[${orderInfo.state5}]]</td>
+	          <td>0</td>
+	        </tr>
+	      </tbody>
+	    </table>
+	    <!-- Pagination -->
+		<nav class="d-flex text-center">
+		  <ul class="pagination">
+		  
+		  
+		    <li class="page-item">
+		      <a class="page-link" onclick="goSearch(1)" aria-label="Previous">
+		        <span aria-hidden="true">&laquo;</span>
+		        <span class="sr-only">First</span>
+		      </a>
+		    </li>
+		    
+		    
+		    <li class="page-item" th:if="${pager.groupNo>1}">
+		      <a class="page-link"  th:onclick="goSearch([[${pager.startPageNo-1}]])"  aria-label="Previous">
+		        <span aria-hidden="true">이전</span>
+		        <span class="sr-only">이전</span>
+		      </a>
+		    </li>
+		    
+		    <th:block th:each="i : ${#numbers.sequence(pager.startPageNo, pager.endPageNo)}">
+		    	<li class="page-item"><a class="page-link" th:onclick="goSearch([[${i}]])">[[${i}]]</a></li>
+		    </th:block>
+		    
+		    <li class="page-item" th:if="${pager.groupNo<pager.totalGroupNo}" >
+		      <a class="page-link" th:onclick="goSearch([[${pager.endPageNo+1}]])" aria-label="Previous">
+		        <span aria-hidden="true">다음</span>
+		        <span class="sr-only">다음</span>
+		      </a>
+		    </li>
+		    
+		    
+		    <li class="page-item">
+		      <a class="page-link" th:onclick="goSearch([[${pager.totalPageNo}]])" aria-label="Next">
+		        <span aria-hidden="true">&raquo;</span>
+		        <span class="sr-only">Last</span>
+		      </a>
+		    </li>
+		  </ul>
+		</nav>
+    </div>
+</html>
