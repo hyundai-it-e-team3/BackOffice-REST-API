@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mycompany.backOfficeAPI.dao.orderDB.OrderDao">
-	
 	<select id="selectByOid" resultType="order" parameterType="String">
 		SELECT o.member_id, o.order_id, o.order_date, os.content state, o.request, o.zip_code, o.address1, o.address2, o.tel, o.name, o.coupon_id
 		FROM morder o, order_state os
@@ -36,23 +35,276 @@
 	</select>
 	
 	<select id="selectByPage" parameterType="pager"  resultType="orderInfo">
-       SELECT o.order_id, o.order_date, o.member_id, o.order_state, od.total_product, od.state1, od.state2, od.state3, od.state4, od.state5, od.state6, p.total_price, p.pay_type
+		SELECT o.rnum, o.order_id, o.order_date, o.member_id, o.order_state, od.total_product, od.state1, od.state2, od.state3, od.state4, od.state5, od.state6, p.total_price, p.pay_type
             FROM (
-                SELECT rnum, order_id, order_date, member_id, order_state
-                FROM (
-                    SELECT ROWNUM as rnum,  order_id, order_date, member_id, order_state
-                    FROM order_view
-                     WHERE rownum &lt;= #{endRowNo}  
-                    ORDER BY order_date DESC
-                )
-                WHERE rnum &gt;= #{startRowNo}
-            ) o, orderdetail_view od, payment_view p
-        WHERE o.order_id = od.order_id 
-		AND o.order_id = p.order_id
+               SELECT ROWNUM rnum, order_id, order_date, member_id, order_state
+               FROM (
+                   SELECT order_id, order_date, member_id, order_state
+                   FROM order_view
+                   ORDER BY order_date DESC
+               ) WHERE ROWNUM &lt;= #{endRowNo}) o, 
+               orderdetail_view od, payment_view p
+        WHERE o.order_id = od.order_id AND o.order_id = p.order_id 
+        AND rnum &gt;= #{startRowNo}
+        ORDER BY rnum
 	</select>
-
+	
 	<select id="count" resultType="int">
 		SELECT count(*) FROM morder
+	</select>
+	
+	<select id="selectBySearch" parameterType="orderSearch"  resultType="orderInfo">
+		SELECT rnum, order_id, order_date, member_id, order_state, total_product, state1, state2, state3, state4, state5, state6, total_price, pay_type
+		FROM (
+		    SELECT ROWNUM rnum, order_id, order_date, member_id, order_state, total_product, state1, state2, state3, state4, state5, state6, total_price, pay_type
+		    FROM (
+		        SELECT o.order_id, o.order_date, o.member_id, o.order_state, od.total_product, od.state1, od.state2, od.state3, od.state4, od.state5, od.state6, p.total_price, p.pay_type
+		        FROM order_view o, orderdetail_view od, payment_view p
+		        WHERE o.order_id = od.order_id AND od.order_id = p.order_id
+		            <if test="oStateList != null and !oStateList.equals('')">
+						AND order_state IN 
+						<foreach item="oState" collection="oStateList" open="(" close=")" separator="," >
+							#{oState}
+						</foreach>
+					</if>
+		            <if test="startDate != null and endDate != null" >
+			  			AND 
+			  			<![CDATA[ 
+			  			(order_date >= #{startDate} AND order_date <= #{endDate})
+			  			]]> 
+			  		</if>
+		            <if test="odStateList != null and !odStateList.equals('')">
+						<foreach item="odState" collection="odStateList">
+							<choose>
+								<when test="odState == '1'">
+									AND od.state1 > 0
+								</when>
+								<when test="odState == '2'">
+									AND od.state2 > 0
+								</when>
+								<when test="odState == '3'">
+									AND od.state3 > 0
+								</when>
+								<when test="odState == '4'">
+									AND od.state4 > 0
+								</when>
+								<when test="odState == '5'">
+									AND od.state5 > 0
+								</when>
+								<when test="odState == '6'">
+									AND od.state6 > 0
+								</when>
+							</choose>
+						</foreach>
+					</if>
+					<if test="searchWord != null and !searchWord.equals('')">
+						<choose>
+							<when test="searchType == 'order_id'">
+								AND order_id like '%' || #{searchWord} || '%'
+							</when>
+							<when test="searchType == 'member_id'">
+								AND member_id like '%' || #{searchWord} || '%'
+							</when>
+							<when test="searchType == 'None'">
+					   			AND (order_id like '%' || #{searchWord} || '%'
+					   			OR member_id like '%' || #{searchWord} || '%')
+				  			</when>
+						</choose>
+					</if>
+		        ORDER BY order_date DESC
+		    )
+		    WHERE  ROWNUM &lt;= #{pager.endRowNo}
+		)
+		WHERE RNUM &gt;= #{pager.startRowNo}
+	</select>
+	<select id="countSearch" parameterType="orderSearch" resultType="int">
+		SELECT count(*)
+        FROM order_view o, orderdetail_view od, payment_view p
+        WHERE o.order_id = od.order_id AND od.order_id = p.order_id
+        <if test="oStateList != null">
+			AND order_state IN 
+			<foreach item="oState" collection="oStateList" open="(" close=")" separator="," >
+				#{oState}
+			</foreach>
+		</if>
+           <if test="startDate != null and endDate != null" >
+  			AND 
+  			<![CDATA[ 
+  			(order_date >= #{startDate} AND order_date <= #{endDate})
+  			]]> 
+  		</if>
+           <if test="odStateList != null">
+			<foreach item="odState" collection="odStateList">
+				<choose>
+					<when test="odState == '1'">
+						AND 
+						<![CDATA[ 
+						od.state1 > 0
+						]]> 
+					</when>
+					<when test="odState == '2'">
+						AND 
+						<![CDATA[ 
+						od.state2 > 0
+						]]> 
+					</when>
+					<when test="odState == '3'">
+						AND 
+						<![CDATA[ 
+						od.state3 > 0
+						]]> 
+					</when>
+					<when test="odState == '4'">
+						AND 
+						<![CDATA[ 
+						od.state4 > 0
+						]]> 
+					</when>
+					<when test="odState == '5'">
+						AND 
+						<![CDATA[ 
+						od.state5 > 0
+						]]> 
+					</when>
+					<when test="odState == '6'">
+						AND 
+						<![CDATA[ 
+						od.state6 > 0
+						]]> 
+					</when>
+				</choose>
+			</foreach>
+		</if>
+	</select>
+	
+	
+	
+	
+	
+	<select id="selectBySearchMap" parameterType="hashmap"  resultType="orderInfo">
+		SELECT rnum, order_id, order_date, member_id, order_state, total_product, state1, state2, state3, state4, state5, state6, total_price, pay_type
+		FROM (
+		    SELECT ROWNUM rnum, order_id, order_date, member_id, order_state, total_product, state1, state2, state3, state4, state5, state6, total_price, pay_type
+		    FROM (
+		        SELECT o.order_id, o.order_date, o.member_id, o.order_state, od.total_product, od.state1, od.state2, od.state3, od.state4, od.state5, od.state6, p.total_price, p.pay_type
+		        FROM order_view o, orderdetail_view od, payment_view p
+		        WHERE o.order_id = od.order_id AND od.order_id = p.order_id
+		            <if test="oStateList.size > 0">
+						AND order_state IN 
+						<foreach item="oState" collection="oStateList" open="(" close=")" separator="," >
+							#{oState}
+						</foreach>
+					</if>
+		            <if test="startDate != null and !startDate.equals('')" >
+			  			AND 
+			  			<![CDATA[ 
+			  			(order_date >= #{startDate} AND order_date <= #{endDate})
+			  			]]> 
+			  		</if>
+		            <if test="odStateList.size > 0">
+						<foreach item="odState" collection="odStateList">
+							<choose>
+								<when test="odState == '1'">
+									AND od.state1 > 0
+								</when>
+								<when test="odState == '2'">
+									AND od.state2 > 0
+								</when>
+								<when test="odState == '3'">
+									AND od.state3 > 0
+								</when>
+								<when test="odState == '4'">
+									AND od.state4 > 0
+								</when>
+								<when test="odState == '5'">
+									AND od.state5 > 0
+								</when>
+								<when test="odState == '6'">
+									AND od.state6 > 0
+								</when>
+							</choose>
+						</foreach>
+					</if>
+					<if test="searchWord != null and !searchWord.equals('')">
+						<choose>
+							<when test="searchType == 'order_id'">
+								AND o.order_id like '%' || #{searchWord} || '%'
+							</when>
+							<when test="searchType == 'member_id'">
+								AND member_id like '%' || #{searchWord} || '%'
+							</when>
+							<when test="searchType == 'None'">
+					   			AND (o.order_id like '%' || #{searchWord} || '%'
+					   			OR member_id like '%' || #{searchWord} || '%')
+				  			</when>
+						</choose>
+					</if>
+		        ORDER BY order_date DESC
+		    )
+		    WHERE  ROWNUM &lt;= #{endRowNo}
+		)
+		WHERE rnum &gt;= #{startRowNo}
+	</select>
+	
+	
+	<select id="countSearchMap" parameterType="hashmap" resultType="int">
+		SELECT count(*)
+        FROM order_view o, orderdetail_view od, payment_view p
+        WHERE o.order_id = od.order_id AND od.order_id = p.order_id
+        <if test="oStateList.size > 0">
+			AND order_state IN 
+			<foreach item="oState" collection="oStateList" open="(" close=")" separator="," >
+				#{oState}
+			</foreach>
+		</if>
+           <if test="startDate != null and !startDate.equals('')" >
+  			AND 
+  			<![CDATA[ 
+  			(order_date >= #{startDate} AND order_date <= #{endDate})
+  			]]> 
+  		</if>
+           <if test="odStateList.size > 0">
+			<foreach item="odState" collection="odStateList">
+				<choose>
+					<when test="odState == '1'">
+						AND 
+						<![CDATA[ 
+						od.state1 > 0
+						]]> 
+					</when>
+					<when test="odState == '2'">
+						AND 
+						<![CDATA[ 
+						od.state2 > 0
+						]]> 
+					</when>
+					<when test="odState == '3'">
+						AND 
+						<![CDATA[ 
+						od.state3 > 0
+						]]> 
+					</when>
+					<when test="odState == '4'">
+						AND 
+						<![CDATA[ 
+						od.state4 > 0
+						]]> 
+					</when>
+					<when test="odState == '5'">
+						AND 
+						<![CDATA[ 
+						od.state5 > 0
+						]]> 
+					</when>
+					<when test="odState == '6'">
+						AND 
+						<![CDATA[ 
+						od.state6 > 0
+						]]> 
+					</when>
+				</choose>
+			</foreach>
+		</if>
 	</select>
 </mapper>
 
