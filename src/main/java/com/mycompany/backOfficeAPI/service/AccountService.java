@@ -32,20 +32,6 @@ public class AccountService {
 		return accountDao.getAccount(memberId);
 	}
 	
-	public InsertAccountResult insertAccount(Account account) {
-		Member member = memberDao.getMember(account.getMemberId());
-		String oneclickpayPassword = member.getOneclickpayPassword();
-		
-		if(oneclickpayPassword == null) {
-			log.info("결제비밀번호 등록 후 계좌를 등록하시오.");
-			return InsertAccountResult.REQUIREDPASSWORD;
-		} else {
-			accountDao.insertAccount(account);
-			log.info("결제수단 등록 성공");
-			return InsertAccountResult.SUCCESS;
-		}
-	}
-	
 	public void deleteAccount(String accountNo) {
 		accountDao.deleteAccount(accountNo);
 	}

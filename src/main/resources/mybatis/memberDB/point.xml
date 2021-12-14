@@ -9,9 +9,9 @@
 	</select>
 
 	<select id="getPointListByPage" resultType="point">
-		SELECT rownum, point_seq, member_id, order_id, type, point, reg_date
+		SELECT rnum, point_seq, member_id, order_id, type, point, reg_date
 		FROM (
-			SELECT rownum, point_seq, member_id, order_id, type, point, reg_date
+			SELECT rownum as rnum, point_seq, member_id, order_id, type, point, reg_date
 			FROM (
 				SELECT *
 				FROM point
@@ -20,6 +20,6 @@
 			)
 			WHERE rownum &lt;= #{pager.endRowNo}
 		)
-		WHERE rownum &gt;= #{pager.startRowNo}
+		WHERE rnum &gt;= #{pager.startRowNo}
 	</select>
 </mapper>

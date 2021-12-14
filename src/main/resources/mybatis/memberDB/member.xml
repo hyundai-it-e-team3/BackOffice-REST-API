@@ -8,27 +8,33 @@
 		WHERE member_id = #{memberId}
 	</update>
 	
-	<select id="getMember" parameterType="String" resultType="member">
-		SELECT *
-		FROM member
-		WHERE member_id = #{memberId}
-	</select>
-	
-	<select id="getAllMemberByPage" parameterType="pager" resultType="member">
-		SELECT rownum, member_id, name, nickname, email, tel, birthday, member_level, kakao_no, member_role, status, last_login_date, point, reg_date, address1, address2
+	<select id="getAllMemberByPage" resultType="member">
+		SELECT rnum, member_id, name, nickname, email, tel, birthday, member_level, kakao_no, member_role, status, last_login_date, point, reg_date, address1, address2
 		FROM (	
-			SELECT rownum, member_id, name, nickname, email, tel, birthday, member_level, kakao_no, member_role, status, last_login_date, point, reg_date, address1, address2
+			SELECT rownum as rnum, member_id, name, nickname, email, tel, birthday, member_level, kakao_no, member_role, status, last_login_date, point, reg_date, address1, address2
 			FROM (
 				SELECT m.member_id, m.name, nickname, email, m.tel, birthday, member_level, kakao_no, member_role, status, last_login_date, point, reg_date, address1, address2
 				FROM member m, address a
 				WHERE m.member_id = a.member_id(+)
 				AND m.member_role = 'ROLE_USER'
 				AND (a.default_address = '1' OR a.default_address IS NULL)
+				<if test="searchTypeMember.searchMemberId != 'none'">
+					AND m.member_id LIKE '%'||#{searchTypeMember.searchMemberId}||'%'
+				</if>
+				<if test="searchTypeMember.searchName != 'none'">
+					AND m.name LIKE '%'||#{searchTypeMember.searchName}||'%'
+				</if>
+				<if test="searchTypeMember.memberLevelList != null and searchTypeMember.memberLevelList.size != 0">
+					AND member_level IN 
+			        <foreach item="memberLevel" collection="searchTypeMember.memberLevelList" open="(" close=")" separator="," >
+			           #{memberLevel}
+			        </foreach>
+				</if>
 				ORDER BY m.reg_date
 			)
-			WHERE rownum &lt;= #{endRowNo}
+			WHERE rownum &lt;= #{pager.endRowNo}
 		)
-		WHERE rownum &gt;= #{startRowNo}
+		WHERE rnum &gt;= #{pager.startRowNo}
 	</select>
 	
 	<select id="getTotalMemberNum" resultType="int">
@@ -37,13 +43,17 @@
 		WHERE m.member_id = a.member_id(+)
 		AND m.member_role = 'ROLE_USER'
 		AND (a.default_address = '1' OR a.default_address IS NULL)
-	</select>
-	
-	<select id="getMemberForOrder" parameterType="String" resultType="memberfororder">
-		SELECT m.name orderName, m.tel orderTel, a.name deliveryName, a.tel deliveryTel, a.zip_code, a.address1, a.address2
-		FROM member m, address a
-		WHERE m.member_id = a.member_id
-		AND m.member_id = #{memberId}
-		AND a.default_address = '1'
+		<if test="searchMemberId != 'none'">
+			AND m.member_id LIKE '%'||#{searchTypeMember.searchMemberId}||'%'
+		</if>
+		<if test="searchName != 'none'">
+			AND m.name LIKE '%'||#{searchTypeMember.searchName}||'%'
+		</if>
+		<if test="memberLevelList != null and memberLevelList.size != 0">
+			AND member_level IN 
+	        <foreach item="memberLevel" collection="memberLevelList" open="(" close=")" separator="," >
+	           #{memberLevel}
+	        </foreach>
+		</if>
 	</select>
 </mapper>
