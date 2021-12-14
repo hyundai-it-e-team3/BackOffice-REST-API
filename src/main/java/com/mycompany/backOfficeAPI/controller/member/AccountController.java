@@ -7,15 +7,12 @@ import javax.annotation.Resource;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mycompany.backOfficeAPI.dto.member.Account;
 import com.mycompany.backOfficeAPI.service.AccountService;
-import com.mycompany.backOfficeAPI.service.AccountService.InsertAccountResult;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -32,24 +29,6 @@ public class AccountController {
 		log.info("결제수단 조회");
 		List<Account> account = accountService.getAccount(memberId);
 		return account;
-	}
-	
-	@PostMapping
-	public String insertAccount(@RequestBody Account account) {
-		log.info("결제수단 추가");
-		log.info(account.toString());
-		
-		//결제수단 추가 시 결제비밀번호가 존재하지 않을 경우 결제비밀번호 추가를 위한 처리
-		InsertAccountResult iar = accountService.insertAccount(account);
-
-		String result;
-		if(iar == InsertAccountResult.SUCCESS) {
-			result = "success";
-		} else {
-			result = "requiredpassword";
-		} 
-		
-		return result;
 	}
 	
 	@DeleteMapping

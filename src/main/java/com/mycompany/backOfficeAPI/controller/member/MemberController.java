@@ -13,9 +13,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,8 +22,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.mycompany.backOfficeAPI.dto.Pager;
 import com.mycompany.backOfficeAPI.dto.member.Member;
-import com.mycompany.backOfficeAPI.dto.member.MemberForOrder;
 import com.mycompany.backOfficeAPI.dto.member.PagerAndMember;
+import com.mycompany.backOfficeAPI.dto.member.SearchTypeMember;
 import com.mycompany.backOfficeAPI.security.JwtUtil;
 import com.mycompany.backOfficeAPI.service.MemberService;
 
@@ -72,33 +71,22 @@ public class MemberController {
 		
 		return map;
 	}
-	
-	@GetMapping("/{memberId}")
-	public Member getMember(@PathVariable String memberId) {
+
+	@PostMapping
+	public PagerAndMember getAllMemberByPage(@RequestParam(defaultValue="1") int pageNo, 
+											 @RequestBody SearchTypeMember searchTypeMember) {
 		log.info("회원정보 조회");
-		return memberService.getMember(memberId);
-	}
-	
-	@GetMapping
-	public PagerAndMember getAllMemberByPage(@RequestParam(defaultValue="1") int pageNo) {
-		log.info("전체 회원정보 조회");
 		
 		int totalRows = memberService.getTotalMemberNum();
 		Pager pager = new Pager(5, 5, totalRows, pageNo);
 		
-		List<Member> memberList = memberService.getAllMemberByPage(pager);
+		List<Member> memberList = memberService.getAllMemberByPage(pager, searchTypeMember);
 
 		PagerAndMember data = new PagerAndMember();
 		data.setPager(pager);
 		data.setMember(memberList);
 		
 		return data;
-	}
-	
-	@GetMapping("/order")
-	public MemberForOrder getMemberForOrder(@RequestBody String memberId) {
-		log.info("주문을 위한 회원정보 조회");
-		return memberService.getMemberForOrder(memberId);
 	}
 	
 }

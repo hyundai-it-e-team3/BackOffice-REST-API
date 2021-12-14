@@ -18,6 +18,7 @@
 		<typeAlias type="com.mycompany.backOfficeAPI.dto.member.Point" alias="point" />
 		<typeAlias type="com.mycompany.backOfficeAPI.dto.member.DetailPoint" alias="detailPoint" />
 		
+		<typeAlias type="com.mycompany.backOfficeAPI.dto.member.SearchTypeMember" alias="searchTypeMember" />
 		
 		<typeAlias type="com.mycompany.backOfficeAPI.dto.product.BrandCategoryDTO" alias="brandCategory"/>
 		<typeAlias type="com.mycompany.backOfficeAPI.dto.product.BrandCategoryTempDTO" alias="brandCategoryTemp"/>

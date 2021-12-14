@@ -29,15 +29,20 @@ public class PointController {
 	@GetMapping("/list/{memberId}")
 	public PagerAndPoint getPointList(@RequestParam(defaultValue="1") int pageNo, @PathVariable String memberId){
 		log.info("포인트내역 조회 실행");
+		log.info(" " + pageNo);
 		
 		int totalRows = pointService.getTotalPointNum(memberId);
 		Pager pager = new Pager(5, 5, totalRows, pageNo);
+		
+		log.info(pager.getStartRowNo() + " ");
+		log.info(pager.getEndRowNo() + " ");
 		
 		List<Point> pointList = pointService.getPointListByPage(memberId, pager);
 		
 		PagerAndPoint data = new PagerAndPoint();
 		data.setPager(pager);
 		data.setPoint(pointList);
+		log.info(pointList.toString());
 		
 		return data;
 	}

@@ -1,6 +1,5 @@
 package com.mycompany.backOfficeAPI.controller;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.mycompany.backOfficeAPI.dto.product.PagerDTO;
 import com.mycompany.backOfficeAPI.dto.product.ProductDTO;
-import com.mycompany.backOfficeAPI.dto.product.ProductDetailDTO;
 import com.mycompany.backOfficeAPI.dto.product.ProductSearchDTO;
 import com.mycompany.backOfficeAPI.dto.product.StockDetailDTO;
 import com.mycompany.backOfficeAPI.service.ProductDetailService;
@@ -46,7 +44,7 @@ public class ProductFragmentController {
 	
 	
 	@RequestMapping("/productList")
-	public String getProductList(@RequestParam Map<String,String> map,Model model){
+	public String getProductList(@RequestParam Map<String,String> map, Model model){
 		
 		ProductSearchDTO productSearchDTO = new ProductSearchDTO();
 		productSearchDTO.setSearchType(map.get("searchType"));

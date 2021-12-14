@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import com.mycompany.backOfficeAPI.dao.memberDB.MemberDao;
 import com.mycompany.backOfficeAPI.dto.Pager;
 import com.mycompany.backOfficeAPI.dto.member.Member;
-import com.mycompany.backOfficeAPI.dto.member.MemberForOrder;
+import com.mycompany.backOfficeAPI.dto.member.SearchTypeMember;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -27,23 +27,13 @@ public class MemberService {
 	}
 	
 	//회원정보 조회
-	public List<Member> getAllMemberByPage(Pager pager) {
-		return memberDao.getAllMemberByPage(pager);
+	public List<Member> getAllMemberByPage(Pager pager, SearchTypeMember searchTypeMember) {
+		return memberDao.getAllMemberByPage(pager, searchTypeMember);
 	}
 	
 	//회원정보 전체 행 수 조회
 	public int getTotalMemberNum() {
 		return memberDao.getTotalMemberNum();
-	}
-	
-	//전체 회원정보 조회
-	public Member getMember(String memberId) {
-		return memberDao.getMember(memberId);
-	}
-	
-	//주문을 위한 회원정보 조회
-	public MemberForOrder getMemberForOrder(String memberId) {
-		return memberDao.getMemberForOrder(memberId);
 	}
 	
 }

@@ -3,9 +3,9 @@
 
 <mapper namespace="com.mycompany.backOfficeAPI.dao.memberDB.MemberCouponDao">
 	<select id="getMemberCouponByPage" resultType="memberCoupon">
-		SELECT rownum, member_id, coupon_id, reg_date, exp_date, status, name, amount, type, content
+		SELECT rnum, member_id, coupon_id, reg_date, exp_date, status, name, amount, type, content
 		FROM (
-			SELECT rownum, member_id, coupon_id, reg_date, exp_date, status, name, amount, type, content
+			SELECT rownum as rnum, member_id, coupon_id, reg_date, exp_date, status, name, amount, type, content
 			FROM (
 				SELECT mc.member_id, mc.coupon_id, mc.reg_date, mc.exp_date, mc.status, c.name, c.amount, c.type, c.content
 				FROM member_coupon mc, coupon c
@@ -15,7 +15,7 @@
 			)
 			WHERE rownum &lt;= #{pager.endRowNo}
 		)
-		WHERE rownum &gt;= #{pager.startRowNo}
+		WHERE rnum &gt;= #{pager.startRowNo}
 	</select>
 	
 	<select id="getTotalMemberCouponNum" parameterType="String" resultType="int">
