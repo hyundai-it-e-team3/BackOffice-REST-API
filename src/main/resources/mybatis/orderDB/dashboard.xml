@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mycompany.backOfficeAPI.dao.orderDB.DashboardDao">
+	<select id="selectQuaterSales" resultType="sale">
+	<![CDATA[ 
+		SELECT ROWNUM, sdate, sale
+		FROM
+		    (SELECT sdate, sale
+		    FROM quarter_sales 
+		    ORDER BY sdate DESC)
+		WHERE ROWNUM <= 4
+	]]>
+	</select>
+	<select id="selectDailySales" resultType="sale">
+	<![CDATA[ 
+		SELECT ROWNUM, sdate, sale
+		FROM
+		    (SELECT sdate, sale
+		    FROM daily_sales 
+		    ORDER BY sdate DESC)
+		WHERE ROWNUM <= 7
+	]]>
+	</select>
+	<select id="selectBrandSales" resultType="sale">
+	<![CDATA[ 
+		SELECT sdate, sale, brand
+		FROM brand_sales
+		WHERE sdate > '211201'
+		ORDER BY sdate DESC
+	]]>
+	</select>
+	<select id="selectMemberInfo" resultType="memberDashboard">
+	<![CDATA[ 
+		SELECT ROWNUM, sdate, sale
+		FROM
+		    (SELECT sdate, sale
+		    FROM member_info )
+		WHERE ROWNUM <= 4
+		ORDER BY sdate DESC
+	]]>
+	</select>
+</mapper>
