@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.mycompany.backOfficeAPI.dto.product.ColorDTO;
 import com.mycompany.backOfficeAPI.dto.product.ProductDTO;
 import com.mycompany.backOfficeAPI.dto.product.ProductSearchDTO;
 
@@ -40,6 +41,10 @@ public interface ProductDAO {
 	public List<ProductDTO> selectProductListBySearch(ProductSearchDTO productSearchDTO);
 
 	public int selectProductListCountBySearch(ProductSearchDTO productSearchDTO);
+
+	public List<ColorDTO> selectAllColor();
+
+	public void insertProduct(ProductDTO productDTO);
 
 
 }

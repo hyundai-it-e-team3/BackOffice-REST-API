@@ -13,6 +13,8 @@
         WHERE ROWNUM = 1
 	</select>
 	
+
+	
 	<select id="selectProductListBySearch" parameterType="productSearch" resultType="product">
 			SELECT rnum , product_id,name,price,content,hit_count
 						,status,reg_date,brand_name,thumbnail
@@ -163,6 +165,13 @@
 	<update id="updateHitCount" parameterType="string">
 		UPDATE product SET hit_count =  hit_count + 1 WHERE product_id = #{productId}
 	</update>
+	
+	
+	
+	<insert id="insertProduct" parameterType="product">
+		INSERT INTO product(product_id,name,content,price,brand_name,hit_count,status,reg_date,thumbnail) 
+		VALUES(#{productId},#{name},#{content},#{price},#{brandName},0,#{status},SYSDATE,#{thumbnail})
+	</insert>
 </mapper>
 
 

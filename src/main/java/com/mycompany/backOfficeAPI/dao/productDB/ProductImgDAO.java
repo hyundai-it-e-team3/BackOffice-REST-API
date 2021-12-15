@@ -11,4 +11,6 @@ public interface ProductImgDAO {
 
 	List<ProductImgDTO> selectByProductDetailId(String productDetailId);
 
+	void insertImg(ProductImgDTO productImgDTO);
+
 }

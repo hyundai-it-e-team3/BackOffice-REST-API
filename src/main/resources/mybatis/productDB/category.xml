@@ -37,5 +37,12 @@
 		FROM category
 		WHERE category_id = #{categoryId}
 	</select>
+	
+	
+	
+	<insert id="insertCategory" parameterType="product">
+		INSERT INTO product_category(product_id,category_id) 
+		VALUES(#{productId},#{categoryId})
+	</insert>
 </mapper>
 

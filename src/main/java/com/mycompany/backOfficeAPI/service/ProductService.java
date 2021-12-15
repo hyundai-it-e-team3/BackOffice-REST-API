@@ -9,16 +9,22 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.mycompany.backOfficeAPI.dao.productDB.BrandDAO;
 import com.mycompany.backOfficeAPI.dao.productDB.CategoryDAO;
 import com.mycompany.backOfficeAPI.dao.productDB.ProductDAO;
 import com.mycompany.backOfficeAPI.dao.productDB.ProductDetailDAO;
 import com.mycompany.backOfficeAPI.dao.productDB.ProductImgDAO;
 import com.mycompany.backOfficeAPI.dao.productDB.StockDAO;
+import com.mycompany.backOfficeAPI.dto.product.BrandDTO;
 import com.mycompany.backOfficeAPI.dto.product.CategoryDTO;
+import com.mycompany.backOfficeAPI.dto.product.ColorDTO;
 import com.mycompany.backOfficeAPI.dto.product.ProductDTO;
 import com.mycompany.backOfficeAPI.dto.product.ProductDetailDTO;
+import com.mycompany.backOfficeAPI.dto.product.ProductImgDTO;
 import com.mycompany.backOfficeAPI.dto.product.ProductSearchDTO;
+import com.mycompany.backOfficeAPI.dto.product.StockDTO;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -40,6 +46,9 @@ public class ProductService {
 	
 	@Resource
 	private ProductImgDAO productImgDAO;
+	
+	@Resource
+	private BrandDAO brandDAO;
 	
 	public ProductDTO getProduct(String productId) {
 		
@@ -191,4 +200,32 @@ public class ProductService {
 	public int getTotalProductNum(ProductSearchDTO productSearchDTO) {
 		return productDAO.selectProductListCountBySearch(productSearchDTO);
 	}
+
+	@Transactional
+	public void registProduct(ProductDTO productDTO) {
+		log.info("1--------");
+		productDAO.insertProduct(productDTO);
+		log.info("2--------");
+		categoryDAO.insertCategory(productDTO);
+		
+		for(ProductDetailDTO productDetailDTO: productDTO.getProductDetailList()) {
+			log.info("3--------");
+			productDetailDAO.insertProductDetail(productDetailDTO);
+			
+			for(ProductImgDTO productImgDTO: productDetailDTO.getImgList()) {
+				log.info("4--------");
+				productImgDAO.insertImg(productImgDTO);
+			}
+			
+			for(StockDTO stockDTO: productDetailDTO.getStockList()) {
+				log.info("5--------");
+				stockDTO.setProductDetailId(productDetailDTO.getProductDetailId());
+				stockDAO.insertStock(stockDTO);
+			}
+		}
+		
+		log.info("6--------");
+	}
+
+
 }

@@ -7,5 +7,5 @@ public class BrandDTO {
 	private String brandName;
 	private String content;
 	private String logoImg;
-	private String branddImg;
+	private String brandImg;
 }

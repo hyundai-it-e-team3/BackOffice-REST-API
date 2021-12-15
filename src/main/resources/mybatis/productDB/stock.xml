@@ -28,6 +28,12 @@
 	<update id="updatePlusByStockDTO" parameterType="stock">
 		UPDATE stock SET amount = amount + #{amount} WHERE product_detail_id = #{productDetailId} and psize = #{psize}
 	</update>	
+	
+	
+	<insert id="insertStock" parameterType="stock">
+		INSERT INTO stock(psize,amount,product_detail_id) 
+		VALUES(#{psize},#{amount},#{productDetailId})
+	</insert>
 </mapper>
 
 
