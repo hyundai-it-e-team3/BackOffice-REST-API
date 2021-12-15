@@ -8,6 +8,12 @@
 		WHERE product_detail_id = #{productDetailId} order by order_num
 	</select>
 		
+		
+	
+	<insert id="insertImg" parameterType="productImg">
+		INSERT INTO product_img(img,product_detail_id,order_num) 
+		VALUES(#{img},#{productDetailId},#{orderNum})
+	</insert>
 </mapper>
 
 

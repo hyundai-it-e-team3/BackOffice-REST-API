@@ -23,10 +23,10 @@
 	          		[[${category}]]<i th:if="${status.index}!=2" class="bi bi-caret-right-fill"/>
 	          	</th:block>
 	          </td>
-	          <td><a class="text-warning" th:onclick="fnModuleInfo([[${product.productId}]])">[[${product.productId}]]</a></td>
+	          <td><a class="text-warning" th:onclick="fnModuleInfo([[${product.productId}]])" >[[${product.productId}]]</a></td>
 	          <td>[[${product.name}]]</td>
 	          <td><span class="status text-success">&bull;</span>진열중</td>
-	          <td>[[${product.price}]]</td>
+	          <td th:text="${#numbers.formatInteger(product.price, 0, 'COMMA')}"></td>
 	          <td th:text="${#dates.format(product.regDate, 'yyyy-MM-dd')}"></td>
 	          <td class="align-middle">
 				<div class="progress">

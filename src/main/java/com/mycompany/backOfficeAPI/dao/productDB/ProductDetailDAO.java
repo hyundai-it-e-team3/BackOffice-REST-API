@@ -20,4 +20,6 @@ public interface ProductDetailDAO {
 
 	public List<ProductDetailDTO> selectProductDetailBySearch(Map<String, Object> map);
 
+	public void insertProductDetail(ProductDetailDTO productDetailDTO);
+
 }

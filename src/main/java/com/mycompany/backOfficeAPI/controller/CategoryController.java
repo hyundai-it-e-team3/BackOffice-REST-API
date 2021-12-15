@@ -24,11 +24,13 @@ public class CategoryController {
 	
 	@RequestMapping("")
 	public List<CategoryDTO> getAllCategory() {
+		log.info("aaaaaa");
 		return categoryService.getCategory();
 	}
 	
 	@RequestMapping("/brand")
 	public List<BrandCategoryDTO> getAllBrandCategory() {
+		log.info("aaaaaa");
 		return categoryService.getBrandCategory();
 	}
 	

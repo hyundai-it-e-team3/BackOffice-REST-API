@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.mycompany.backOfficeAPI.dto.product.CategoryDTO;
+import com.mycompany.backOfficeAPI.dto.product.ProductDTO;
 
 @Mapper
 public interface CategoryDAO {
@@ -22,5 +23,7 @@ public interface CategoryDAO {
 	public List<CategoryDTO> selectAllCategory();
 
 	public CategoryDTO selectCategoryById(String categoryId);
+
+	public void insertCategory(ProductDTO productDTO);
 
 }

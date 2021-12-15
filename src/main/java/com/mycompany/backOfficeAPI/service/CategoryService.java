@@ -104,6 +104,7 @@ public class CategoryService {
 		}
 		
 		idx = 0;
+		log.info(brandList.toString());
 		brandList.get(0).setBrandCategoryTempList(new ArrayList<BrandCategoryTempDTO>());
 		for(int i = 0; i < brandMainList.size(); i++) {
 			if(!brandMainList.get(i).getBrandName().equals(brandList.get(idx).getBrandName())) {

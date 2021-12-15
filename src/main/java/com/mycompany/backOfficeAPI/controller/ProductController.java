@@ -8,10 +8,14 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mycompany.backOfficeAPI.dto.product.BrandDTO;
+import com.mycompany.backOfficeAPI.dto.product.ColorDTO;
 import com.mycompany.backOfficeAPI.dto.product.PagerDTO;
 import com.mycompany.backOfficeAPI.dto.product.ProductDTO;
 import com.mycompany.backOfficeAPI.dto.product.ProductSearchDTO;
@@ -84,4 +88,19 @@ public class ProductController {
 		
 		return productService.getProductByText(text,startRow,endRow,sortId);
 	}
+	
+	@PostMapping("/regist")
+	public Map<String,String> registProduct(@RequestBody ProductDTO productDTO){
+		
+		log.info(productDTO.toString());
+		productService.registProduct(productDTO);
+		
+		Map<String,String> map = new HashMap<>();
+		map.put("result","success");
+		
+		
+		
+		return map;
+	}
+	
 }

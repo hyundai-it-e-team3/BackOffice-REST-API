@@ -57,6 +57,13 @@
 		order by ${sortId}
 		)c where <![CDATA[rownum<=#{endRow}]]> ) d where  <![CDATA[rnum>= #{startRow}]]> 
 	</select>
+	
+	
+		
+	<insert id="insertProductDetail" parameterType="productDetail">
+		INSERT INTO product_detail(product_detail_id,with_product,color_code,color_chip,product_id) 
+		VALUES(#{productDetailId},#{withProduct},#{colorCode},#{colorChip},#{productId})
+	</insert>
 </mapper>
 
 
