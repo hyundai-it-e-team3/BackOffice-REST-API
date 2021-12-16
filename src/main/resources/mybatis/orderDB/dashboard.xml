@@ -29,14 +29,30 @@
 		ORDER BY sdate DESC
 	]]>
 	</select>
-	<select id="selectMemberInfo" resultType="memberDashboard">
+	
+	
+	<insert id="insertDailySales">
 	<![CDATA[ 
-		SELECT ROWNUM, sdate, sale
-		FROM
-		    (SELECT sdate, sale
-		    FROM member_info )
-		WHERE ROWNUM <= 4
-		ORDER BY sdate DESC
+		INSERT INTO daily_sales
+		(sdate, sale)
+		VALUES (sysdate-1, 
+			(SELECT nvl(sum(nvl(p.price,0)),0) sale
+			FROM payment p, morder o
+			WHERE o.order_id = p.order_id AND
+			        o.order_date > sysdate - 1
+			)
+		)
 	]]>
-	</select>
+	</insert>
+	<insert id="insertBrandSales">
+	<![CDATA[ 
+		INSERT INTO brand_sales
+			(SELECT sysdate-1, od.brand, nvl(sum(od.price),0) sale
+			FROM order_detail od, morder o
+			WHERE o.order_id = od.order_id AND o.order_date > sysdate - 1
+			GROUP BY brand
+			)
+	]]>
+	</insert>
+
 </mapper>

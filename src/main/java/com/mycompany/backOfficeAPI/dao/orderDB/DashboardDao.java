@@ -12,5 +12,7 @@ public interface DashboardDao {
 	List<SaleDashboard> selectQuaterSales();
 	List<SaleDashboard> selectDailySales();
 	List<SaleDashboard> selectBrandSales();
-	List<MemberDashboard> selectMemberInfo();
+	void insertQuaterSales();
+	void insertDailySales();
+	void insertBrandSales();
 }

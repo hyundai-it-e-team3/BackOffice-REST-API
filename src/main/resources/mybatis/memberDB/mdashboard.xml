@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mycompany.backOfficeAPI.dao.memberDB.MDashboardDao">
+
+	<select id="selectMemberStat" resultType="memberDashboard">
+	<![CDATA[ 
+		SELECT age, gender, value
+		FROM member_stat
+		WHERE seq = (SELECT MAX(seq) FROM member_stat)
+	]]>
+	</select>
+	
+	<insert id="insertMemberStat">
+		INSERT INTO member_stat
+		(
+			SELECT  age, value, gender, (SELECT MAX(seq)+1 FROM member_stat) seq
+       		FROM 
+				( SELECT 
+                TRUNC(MONTHS_BETWEEN(TRUNC(SYSDATE), TRUNC(birthday)) / 120) age, 
+                count(*) value,
+                nvl(gender,'-') gender
+                FROM member
+                GROUP BY TRUNC(MONTHS_BETWEEN(TRUNC(SYSDATE), TRUNC(birthday)) / 120),  gender
+        		)
+        )
+	</insert>
+
+
+
+
+</mapper>

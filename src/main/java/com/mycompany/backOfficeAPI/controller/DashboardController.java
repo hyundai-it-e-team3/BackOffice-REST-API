@@ -5,6 +5,7 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -39,6 +40,26 @@ public class DashboardController {
 	@GetMapping("/member")
 	public List<MemberDashboard> getMemberInfo() {
 		return dashboardService.getMemberInfo();
+	}
+	
+	@PostMapping("/quater")
+	public void setQurterSales() {
+		dashboardService.setQuaterSales();
+	}
+	
+	@PostMapping("/daily")
+	public void setDailySales(){
+		dashboardService.setDailySales();
+	}
+	
+	@PostMapping("/brand")
+	public void setBrandSales() {
+		dashboardService.setBrandSales();
+	}
+	
+	@PostMapping("/member")
+	public void setMemberInfo() {
+		dashboardService.setMemberInfo();
 	}
 	
 }
