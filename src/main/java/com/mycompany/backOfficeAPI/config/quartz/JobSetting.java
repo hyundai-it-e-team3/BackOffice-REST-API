@@ -18,6 +18,7 @@ import org.springframework.context.annotation.Configuration;
 
 import com.mycompany.backOfficeAPI.run.JobA;
 import com.mycompany.backOfficeAPI.run.JobB;
+import com.mycompany.backOfficeAPI.run.UpdateDashboardJob;
 
 @Configuration
 public class JobSetting {
@@ -29,13 +30,14 @@ public class JobSetting {
     public void start(){
 
         JobDetail jobDetailA = buildJobDetail(JobA.class, new HashMap());
-        JobDetail jobDetailB = buildJobDetail(JobB.class, new HashMap());
-
+        JobDetail jobUpdateDash = buildJobDetail(UpdateDashboardJob.class, new HashMap());
+        
         try{
-            scheduler.scheduleJob(jobDetailA, buildJobTrigger("0/20 * * * * ?"));
-            scheduler.scheduleJob(jobDetailB, buildJobTrigger("0/30 * * * * ?"));
+        	//20초마다 실행
+            //scheduler.scheduleJob(jobDetailA, buildJobTrigger("0/20 * * * * ?"));
+            
             //매일 정오에 실행
-            //scheduler.scheduleJob(jobDetailB, buildJobTrigger("0 0 12  * * ?"));
+            scheduler.scheduleJob(jobUpdateDash, buildJobTrigger("0 0 12  * * ?"));
         } catch(SchedulerException e){
             e.printStackTrace();
         }
