@@ -1,6 +1,7 @@
 package com.mycompany.backOfficeAPI.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -23,22 +24,23 @@ public class DashboardController {
 	DashboardService dashboardService;
 	
 	@GetMapping("/quater")
-	public List<SaleDashboard> getQurterSales() {
+	public Map<String, Object> getQurterSales() {
 		return dashboardService.getQuaterSales();
 	}
 	
 	@GetMapping("/daily")
-	public List<SaleDashboard> getDailySales(){
+	public Map<String, Object> getDailySales(){
 		return dashboardService.getDailySales();
 	}
 	
 	@GetMapping("/brand")
-	public List<SaleDashboard> getBrandSales() {
+	public Map<String, Object> getBrandSales() {
+		log.info(dashboardService.getBrandSales().toString());
 		return dashboardService.getBrandSales();
 	}
 	
 	@GetMapping("/member")
-	public List<MemberDashboard> getMemberInfo() {
+	public Map<String, Object> getMemberInfo() {
 		return dashboardService.getMemberInfo();
 	}
 	
