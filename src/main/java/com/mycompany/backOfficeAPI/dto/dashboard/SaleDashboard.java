@@ -6,7 +6,8 @@ import lombok.Data;
 
 @Data
 public class SaleDashboard {
-	Date date;
+	Date sdate;
 	String brand;
 	int sale;
+	String squater;
 }

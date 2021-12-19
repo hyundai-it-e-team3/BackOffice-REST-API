@@ -3,12 +3,13 @@
 <mapper namespace="com.mycompany.backOfficeAPI.dao.orderDB.DashboardDao">
 	<select id="selectQuaterSales" resultType="sale">
 	<![CDATA[ 
-		SELECT ROWNUM, sdate, sale
+		SELECT ROWNUM, squater, sale
 		FROM
-		    (SELECT sdate, sale
+		    (SELECT squater, sale
 		    FROM quarter_sales 
-		    ORDER BY sdate DESC)
-		WHERE ROWNUM <= 4
+		    ORDER BY squater DESC)
+		WHERE ROWNUM <= 8
+		ORDER BY squater
 	]]>
 	</select>
 	<select id="selectDailySales" resultType="sale">
@@ -22,12 +23,8 @@
 	]]>
 	</select>
 	<select id="selectBrandSales" resultType="sale">
-	<![CDATA[ 
 		SELECT sdate, sale, brand
 		FROM brand_sales
-		WHERE sdate > '211201'
-		ORDER BY sdate DESC
-	]]>
 	</select>
 	
 	
