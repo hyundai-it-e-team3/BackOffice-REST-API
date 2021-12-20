@@ -51,15 +51,16 @@ public class DashboardService {
 	
 	public Map<String,Object> getDailySales() {
 		List<SaleDashboard> DailySales = dashboardDao.selectDailySales();
+		log.info(DailySales.toString());
 		
 		List<String> labels = new ArrayList<String>();
 		List<Integer> data = new ArrayList<Integer>();
 		
 		for(SaleDashboard sale : DailySales) {
-			labels.add(sale.getSdate().getMonth() + "/" + sale.getSdate().getDay());
+			labels.add(sale.getSdate().toLocaleString().substring(6, 12));
 			data.add(sale.getSale());
 		}
-		
+		log.info(labels.toString());
 		Map<String,Object> result = new HashMap<String, Object>();
 		result.put("labels", labels);
 		result.put("data", data);

@@ -8,6 +8,8 @@ import lombok.Data;
 public class PTimeline {
 	String orderId;
 	String type;
+	String typeCode;
 	Date issueDate;
 	String state;
+	String stateCode;
 }

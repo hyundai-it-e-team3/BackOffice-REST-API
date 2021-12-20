@@ -2,32 +2,32 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mycompany.backOfficeAPI.dao.orderDB.OrderDao">
 	<select id="selectByOid" resultType="order" parameterType="String">
-		SELECT o.member_id, o.order_id, o.order_date, os.content state, o.request, o.zip_code, o.address1, o.address2, o.tel, o.name, o.coupon_id
+		SELECT o.member_id, o.order_id, o.order_date, os.state, o.request, o.zip_code, o.address1, o.address2, o.tel, o.name, o.coupon_id
 		FROM morder o, order_state os
-		WHERE order_id = #{value} AND o.state = os.state
+		WHERE order_id = #{value} AND o.state_code = os.state_code
 	</select>
 	
 	<select id="selectByOidMid" resultType="order" parameterType="Map">
-		SELECT order_date, state, request, zip_code, address1, address2, tel, tel, name, coupon_id
-		FROM morder
-		WHERE order_id = #{orderId} AND member_id = #{memberId} 
+		SELECT o.order_date, os.state, o.request, o.zip_code, o.address1, o.address2, o.tel, o.name, o.coupon_id
+		FROM morder o, order_state os
+		WHERE order_id = #{orderId} AND member_id = #{memberId} AND o.state_code = os.state_code
 	</select>
 	
 	<select id="selectByMid" resultType="order" parameterType="String">
-		SELECT order_id, order_date, state
-		FROM morder
-		WHERE member_id=#{value}
+		SELECT o.order_id, o.order_date, os.state
+		FROM morder o, order_state os
+		WHERE member_id=#{value} AND o.state_code = os.state_code
 		ORDER BY order_date DESC
 	</select>
 	
 	<update id="updateState" parameterType="order">
 		UPDATE morder
-		SET state = #{state}
+		SET state_code = #{stateCode}
 		WHERE order_id = #{orderId}
 	</update>
 	
 	<select id="selectOrderList" resultType="orderInfo">
-		SELECT o.order_id, o.order_date, o.member_id, o.order_state, od.total_product, od.state1, od.state2, od.state3, od.state4, od.state5, od.state6, p.total_price, p.pay_type
+		SELECT o.order_id, o.order_date, o.member_id, o.state, od.total_product, od.state1, od.state2, od.state3, od.state4, od.state5, od.state6, p.total_price, p.pay_type
 		FROM order_view o, orderdetail_view od, payment_view p
 		WHERE o.order_id = od.order_id 
 		AND p.order_id = od.order_id
@@ -35,11 +35,11 @@
 	</select>
 	
 	<select id="selectByPage" parameterType="pager"  resultType="orderInfo">
-		SELECT o.rnum, o.order_id, o.order_date, o.member_id, o.order_state, od.total_product, od.state1, od.state2, od.state3, od.state4, od.state5, od.state6, p.total_price, p.pay_type
+		SELECT o.rnum, o.order_id, o.order_date, o.member_id, o.state, od.total_product, od.state1, od.state2, od.state3, od.state4, od.state5, od.state6, p.total_price, p.pay_type
             FROM (
-               SELECT ROWNUM rnum, order_id, order_date, member_id, order_state
+               SELECT ROWNUM rnum, order_id, order_date, member_id, state
                FROM (
-                   SELECT order_id, order_date, member_id, order_state
+                   SELECT order_id, order_date, member_id, state
                    FROM order_view
                    ORDER BY order_date DESC
                ) WHERE ROWNUM &lt;= #{endRowNo}) o, 
@@ -54,15 +54,15 @@
 	</select>
 	
 	<select id="selectBySearch" parameterType="orderSearch"  resultType="orderInfo">
-		SELECT rnum, order_id, order_date, member_id, order_state, total_product, state1, state2, state3, state4, state5, state6, total_price, pay_type
+		SELECT rnum, order_id, order_date, member_id, state, total_product, state1, state2, state3, state4, state5, state6, total_price, pay_type
 		FROM (
-		    SELECT ROWNUM rnum, order_id, order_date, member_id, order_state, total_product, state1, state2, state3, state4, state5, state6, total_price, pay_type
+		    SELECT ROWNUM rnum, order_id, order_date, member_id, state, total_product, state1, state2, state3, state4, state5, state6, total_price, pay_type
 		    FROM (
-		        SELECT o.order_id, o.order_date, o.member_id, o.order_state, od.total_product, od.state1, od.state2, od.state3, od.state4, od.state5, od.state6, p.total_price, p.pay_type
+		        SELECT o.order_id, o.order_date, o.member_id, o.state, od.total_product, od.state1, od.state2, od.state3, od.state4, od.state5, od.state6, p.total_price, p.pay_type
 		        FROM order_view o, orderdetail_view od, payment_view p
 		        WHERE o.order_id = od.order_id AND od.order_id = p.order_id
 		            <if test="oStateList != null and !oStateList.equals('')">
-						AND order_state IN 
+						AND o.state IN 
 						<foreach item="oState" collection="oStateList" open="(" close=")" separator="," >
 							#{oState}
 						</foreach>
@@ -123,7 +123,7 @@
         FROM order_view o, orderdetail_view od, payment_view p
         WHERE o.order_id = od.order_id AND od.order_id = p.order_id
         <if test="oStateList != null">
-			AND order_state IN 
+			AND o.state IN 
 			<foreach item="oState" collection="oStateList" open="(" close=")" separator="," >
 				#{oState}
 			</foreach>
@@ -179,15 +179,15 @@
 	</select>
 	
 	<select id="selectBySearchMap" parameterType="hashmap"  resultType="orderInfo">
-		SELECT rnum, order_id, order_date, member_id, order_state, total_product, state1, state2, state3, state4, state5, state6, total_price, pay_type
+		SELECT rnum, order_id, order_date, member_id, state, total_product, state1, state2, state3, state4, state5, state6, total_price, pay_type
 		FROM (
-		    SELECT ROWNUM rnum, order_id, order_date, member_id, order_state, total_product, state1, state2, state3, state4, state5, state6, total_price, pay_type
+		    SELECT ROWNUM rnum, order_id, order_date, member_id, state, total_product, state1, state2, state3, state4, state5, state6, total_price, pay_type
 		    FROM (
-		        SELECT o.order_id, o.order_date, o.member_id, o.order_state, od.total_product, od.state1, od.state2, od.state3, od.state4, od.state5, od.state6, p.total_price, p.pay_type
+		        SELECT o.order_id, o.order_date, o.member_id, o.state, od.total_product, od.state1, od.state2, od.state3, od.state4, od.state5, od.state6, p.total_price, p.pay_type
 		        FROM order_view o, orderdetail_view od, payment_view p
 		        WHERE o.order_id = od.order_id AND od.order_id = p.order_id
 		            <if test="oStateList.size > 0">
-						AND order_state IN 
+						AND o.state IN 
 						<foreach item="oState" collection="oStateList" open="(" close=")" separator="," >
 							#{oState}
 						</foreach>
@@ -249,7 +249,7 @@
         FROM order_view o, orderdetail_view od, payment_view p
         WHERE o.order_id = od.order_id AND od.order_id = p.order_id
         <if test="oStateList.size > 0">
-			AND order_state IN 
+			AND o.state IN 
 			<foreach item="oState" collection="oStateList" open="(" close=")" separator="," >
 				#{oState}
 			</foreach>
@@ -305,11 +305,11 @@
 	</select>
 
 	<select id="getMemberOrderByPager" resultType="orderInfo">
-		SELECT o.order_id, o.order_date, o.member_id, o.order_state, od.total_product, od.state1, od.state2, od.state3, od.state4, od.state5, p.total_price, p.pay_type
+		SELECT o.order_id, o.order_date, o.member_id, o.state, od.total_product, od.state1, od.state2, od.state3, od.state4, od.state5, p.total_price, p.pay_type
 		FROM (
-			  SELECT rnum, order_id, order_date, member_id, order_state
+			  SELECT rnum, order_id, order_date, member_id, state
               FROM (
-              		SELECT ROWNUM as rnum,  order_id, order_date, member_id, order_state
+              		SELECT ROWNUM as rnum,  order_id, order_date, member_id, state
                     FROM order_view
                     WHERE member_id = #{memberId}
                     ORDER BY order_date DESC

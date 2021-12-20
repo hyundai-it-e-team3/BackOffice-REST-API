@@ -18,7 +18,9 @@
 		FROM
 		    (SELECT sdate, sale
 		    FROM daily_sales 
-		    ORDER BY sdate DESC)
+		    WHERE sdate >= sysdate-10
+		    ORDER BY sdate
+		    )
 		WHERE ROWNUM <= 7
 	]]>
 	</select>

@@ -11,6 +11,7 @@ public class Order {
 	String memberId;
 	Date orderDate;
 	String state;
+	String stateCode;
 	String request;
 	int zipCode;
 	String address1;

@@ -2,13 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mycompany.backOfficeAPI.dao.orderDB.OrderDetailDao">
 	<select id="selectByOid" resultType="orderDetail" parameterType="String">
-		SELECT od.psize, od.order_id, od.amount, od.price, os.content state, delivery_no, od.product_detail_id
+		SELECT od.psize, od.order_id, od.amount, od.price, os.state, od.delivery_no, od.product_detail_id
 		FROM order_detail od, od_state os
-		WHERE od.order_id = #{value} AND os.state = od.state
+		WHERE od.order_id = #{value} AND os.state_code = od.state_code
 	</select>
-	<update id="updateState" parameterType="order">
+	<update id="updateState" parameterType="orderDetail">
 		UPDATE order_detail
-		SET state = #{state}
+		SET state_code = #{stateCode}
 		WHERE product_detail_id = #{productDetailId} AND order_id = #{orderId} AND psize = #{psize}
 	</update>
 	
