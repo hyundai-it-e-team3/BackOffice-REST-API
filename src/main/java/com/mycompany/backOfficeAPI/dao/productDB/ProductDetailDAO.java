@@ -22,4 +22,8 @@ public interface ProductDetailDAO {
 
 	public void insertProductDetail(ProductDetailDTO productDetailDTO);
 
+	public int selectTotalProductDetailById(String productDetailId);
+
+	public List<ProductDetailDTO> selectProductDetailListById(Map<String, Object> map);
+
 }

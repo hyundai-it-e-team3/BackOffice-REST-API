@@ -227,5 +227,13 @@ public class ProductService {
 		log.info("6--------");
 	}
 
+	public int getTotalWith(String productDetailId) {
+		return productDetailDAO.selectTotalProductDetailById(productDetailId);
+	}
+
+	public List<String> getAllSize() {
+		return stockDAO.selectAllSize();
+	}
+
 
 }

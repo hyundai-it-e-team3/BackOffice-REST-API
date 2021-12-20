@@ -20,6 +20,17 @@
 		WHERE a.product_id = b.product_id and a.product_detail_id = #{productDetailId}
 	</select>
 	
+	<select id="selectProductDetailListById" parameterType="map" resultType="productDetail">
+			SELECT rnum ,name, brand_name, product_detail_id, product_id
+				FROM(SELECT rownum as rnum, name, brand_name, product_detail_id, product_id
+					FROM(SELECT 
+						a.name,a.brand_name,b.product_detail_id,a.product_id
+						FROM product a, product_detail b
+						WHERE 
+							a.product_id = b.product_id AND
+				    		b.product_detail_id like '%'||#{productDetailId}||'%' order by b.product_detail_id)d where <![CDATA[rownum<=#{endRow}]]> ) e where  <![CDATA[rnum>= #{startRow}]]>  
+	</select>
+	
 	<select id="selectTotalProductDetailBySearch" parameterType="map" resultType="int">
 		SELECT count(*)
 		FROM product_detail b, product a, stock c
@@ -36,6 +47,12 @@
 		</if>
 	</select>
 	
+	<select id="selectTotalProductDetailById" parameterType="string" resultType="int">
+		SELECT count(*)
+		FROM product_detail 
+		WHERE 
+		product_detail_id like '%'||#{productDetailId}||'%'
+	</select>
 	
 	<select id="selectProductDetailBySearch" parameterType="map" resultType="productDetail">
 	

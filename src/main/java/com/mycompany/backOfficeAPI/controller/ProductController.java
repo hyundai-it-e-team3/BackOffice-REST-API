@@ -7,6 +7,8 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,7 +20,10 @@ import com.mycompany.backOfficeAPI.dto.product.BrandDTO;
 import com.mycompany.backOfficeAPI.dto.product.ColorDTO;
 import com.mycompany.backOfficeAPI.dto.product.PagerDTO;
 import com.mycompany.backOfficeAPI.dto.product.ProductDTO;
+import com.mycompany.backOfficeAPI.dto.product.ProductDetailDTO;
 import com.mycompany.backOfficeAPI.dto.product.ProductSearchDTO;
+import com.mycompany.backOfficeAPI.dto.product.StockDetailDTO;
+import com.mycompany.backOfficeAPI.service.ProductDetailService;
 import com.mycompany.backOfficeAPI.service.ProductService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -31,7 +36,10 @@ public class ProductController {
 	@Resource
 	private ProductService productService;
 	
-	@RequestMapping("/{productId}")
+	@Resource
+	private ProductDetailService productDetailService;
+	
+	@GetMapping("/{productId}")
 	public ProductDTO getProduct(@PathVariable String productId){
 		return productService.getProduct(productId);
 	}
@@ -89,6 +97,35 @@ public class ProductController {
 		return productService.getProductByText(text,startRow,endRow,sortId);
 	}
 	
+	@GetMapping("/withProductList")
+	public Map<String,Object> getWithProductList(@RequestParam String productDetailId, @RequestParam String pageNo){
+		
+		Map<String,Object> resultMap = new HashMap<>();
+		int totalRows = productService.getTotalWith(productDetailId);
+
+		PagerDTO pagerDTO = new PagerDTO(10, 5, totalRows,  Integer.parseInt(pageNo));
+		
+		List<ProductDetailDTO> list = productDetailService.getWithProductList(productDetailId,pagerDTO.getStartRowNo(),pagerDTO.getEndRowNo());
+		
+		log.info("총합: "+totalRows);
+		log.info(list.toString());
+		
+		
+		
+		resultMap.put("pager",pagerDTO);
+		resultMap.put("productDetailList",list);
+		
+		return resultMap;
+	}
+	
+	@GetMapping("/sizeList")
+	public List<String> getSizetList(){
+		
+		List<String> sizeList = productService.getAllSize();
+		
+		return sizeList;
+	}
+	
 	@PostMapping("/regist")
 	public Map<String,String> registProduct(@RequestBody ProductDTO productDTO){
 		
@@ -99,8 +136,72 @@ public class ProductController {
 		map.put("result","success");
 		
 		
-		
 		return map;
+	}
+	
+	@PostMapping("/productList")
+	public Map<String,Object> getProductList(@RequestBody ProductSearchDTO productSearchDTO){		
+		
+		String searchType = productSearchDTO.getSearchType();
+		String keyWord = productSearchDTO.getKeyWord();
+		String categoryId = productSearchDTO.getCategoryId();
+		String regStart =  productSearchDTO.getRegStart();
+		String regEnd = productSearchDTO.getRegEnd();
+		String status = productSearchDTO.getStatus();
+		
+		Map<String,Object> resultMap = new HashMap<>();
+		
+		
+		
+		if(categoryId.equals("None")) {
+			productSearchDTO.setCategoryId("");
+		}
+		
+		int totalRows = productService.getTotalProductNum(productSearchDTO);
+		PagerDTO pagerDTO = new PagerDTO(10, 5, totalRows,  Integer.parseInt(productSearchDTO.getPageNo()));
+		
+		productSearchDTO.setStartRow(pagerDTO.getStartRowNo());
+		productSearchDTO.setEndRow(pagerDTO.getEndRowNo());
+		
+		
+		resultMap.put("pager", pagerDTO);
+		
+		log.info("총 RO개수: "+totalRows);
+		
+		log.info(searchType);
+		log.info(keyWord);
+		log.info(categoryId);
+		log.info("regStart: "+regStart);
+		log.info("regEnd: "+regEnd);
+		log.info(status);
+		
+		List<ProductDTO> productList = productService.getProductList(productSearchDTO);
+		log.info(productList.toString());
+		resultMap.put("productList", productList);
+
+		return resultMap;
+	}
+	
+	
+	
+	@PostMapping("/stockList")
+	public Map<String,Object> getProductList(@RequestBody Map<String,String> map){		
+		
+		Map<String,Object> resultMap = new HashMap<>();
+		
+		String searchType = map.get("searchType");
+		String keyWord = map.get("keyWord");
+		String sortId = map.get("sortId");
+		int pageNo = Integer.parseInt(map.get("pageNo"));
+		
+		int totalRows = productDetailService.getTotalProductDetail(searchType,keyWord);
+		PagerDTO pagerDTO = new PagerDTO(10, 5, totalRows, pageNo);
+		List<StockDetailDTO> list = productDetailService.getProductDetailList(searchType,keyWord,pagerDTO.getStartRowNo(),pagerDTO.getEndRowNo(),sortId);
+		
+		resultMap.put("pager",pagerDTO);
+		resultMap.put("stockList",list);
+
+		return resultMap;
 	}
 	
 }

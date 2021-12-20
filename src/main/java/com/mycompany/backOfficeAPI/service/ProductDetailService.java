@@ -81,4 +81,12 @@ public class ProductDetailService {
 		return productDetailDAO.selectTotalProductDetailBySearch(map);
 	}
 
+	public List<ProductDetailDTO> getWithProductList(String productDetailId, int startRowNo, int endRowNo) {
+		Map<String,Object> map = new HashMap<>();
+		map.put("productDetailId",productDetailId);
+		map.put("startRow",startRowNo);
+		map.put("endRow",endRowNo);
+		return productDetailDAO.selectProductDetailListById(map);
+	}
+
 }
