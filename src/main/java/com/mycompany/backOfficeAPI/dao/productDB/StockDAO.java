@@ -13,4 +13,5 @@ public interface StockDAO {
 	public int updatePlusByStockDTO(StockDTO stockDTO);
 	public int updateMinusByStockDTO(StockDTO stockDTO);
 	public void insertStock(StockDTO stockDTO);
+	public List<String> selectAllSize();
 }

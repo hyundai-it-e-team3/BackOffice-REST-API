@@ -14,6 +14,11 @@
 		WHERE product_detail_id = #{productDetailId} order by psize
 	</select>
 	
+	<select id="selectAllSize" resultType="string">
+		SELECT distinct psize
+		FROM stock order by psize
+	</select>
+	
 	
 	<select id="selectProductDetailBySearch" parameterType="string" resultType="stock">
 		SELECT psize, amount, product_detail_id 

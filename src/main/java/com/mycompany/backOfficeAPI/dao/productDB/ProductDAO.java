@@ -46,5 +46,4 @@ public interface ProductDAO {
 
 	public void insertProduct(ProductDTO productDTO);
 
-
 }
