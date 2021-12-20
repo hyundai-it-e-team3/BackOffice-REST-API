@@ -9,7 +9,7 @@ public class OrderInfo {
 	String orderId;
 	Date orderDate;
 	String memberId;
-	String orderState;
+	String state;
 	int totalProduct;
 	int state1;
 	int state2;

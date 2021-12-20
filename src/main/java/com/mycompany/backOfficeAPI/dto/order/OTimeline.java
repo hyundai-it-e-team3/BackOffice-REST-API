@@ -9,4 +9,5 @@ public class OTimeline {
 	String orderId;
 	Date issueDate;
 	String state;
+	String stateCode;
 }

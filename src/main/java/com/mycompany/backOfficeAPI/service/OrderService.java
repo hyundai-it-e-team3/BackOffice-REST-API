@@ -122,17 +122,18 @@ public class OrderService {
 	@Transactional
 	public void updateState(OrderDetail orderDetail) {
 		log.info("실행");
+		log.info(orderDetail.toString());
 		orderDetailDao.updateState(orderDetail);
 		odTimelineDao.insert(orderDetail);
-		String state =  orderDetail.getState();
+		String stateCode =  orderDetail.getStateCode();
 		Order order = new Order();
 		order.setOrderId(orderDetail.getOrderId());
-		switch(state) {
+		switch(stateCode) {
 			case "6":
-				order.setState("0");
+				order.setStateCode("0");
 				break;
 			default :
-				order.setState("2");
+				order.setStateCode("2");
 		}
 		orderDao.updateState(order);
 	}
