@@ -9,16 +9,15 @@
 	</settings>
 	<typeAliases>
 		<typeAlias type="com.mycompany.backOfficeAPI.dto.member.Member" alias="member" />
-		<typeAlias type="com.mycompany.backOfficeAPI.dto.member.Wishlist" alias="wishlist" />
-		<typeAlias type="com.mycompany.backOfficeAPI.dto.member.FvBrand" alias="fvbrand" />
-		<typeAlias type="com.mycompany.backOfficeAPI.dto.member.Address" alias="address" />
-		<typeAlias type="com.mycompany.backOfficeAPI.dto.member.Account" alias="account" />
 		<typeAlias type="com.mycompany.backOfficeAPI.dto.member.MemberForOrder" alias="memberfororder" />
 		<typeAlias type="com.mycompany.backOfficeAPI.dto.member.MemberCoupon" alias="memberCoupon" />
 		<typeAlias type="com.mycompany.backOfficeAPI.dto.member.Point" alias="point" />
-		<typeAlias type="com.mycompany.backOfficeAPI.dto.member.DetailPoint" alias="detailPoint" />
+		<typeAlias type="com.mycompany.backOfficeAPI.dto.member.Coupon" alias="coupon" />
+		<typeAlias type="com.mycompany.backOfficeAPI.dto.member.Event" alias="event" />
 		
 		<typeAlias type="com.mycompany.backOfficeAPI.dto.member.SearchTypeMember" alias="searchTypeMember" />
+		<typeAlias type="com.mycompany.backOfficeAPI.dto.member.SearchTypeCoupon" alias="searchTypeCoupon" />
+		<typeAlias type="com.mycompany.backOfficeAPI.dto.member.SearchTypeEvent" alias="searchTypeEvent" />
 		
 		<typeAlias type="com.mycompany.backOfficeAPI.dto.product.BrandCategoryDTO" alias="brandCategory"/>
 		<typeAlias type="com.mycompany.backOfficeAPI.dto.product.BrandCategoryTempDTO" alias="brandCategoryTemp"/>

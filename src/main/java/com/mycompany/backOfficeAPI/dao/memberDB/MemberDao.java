@@ -12,6 +12,6 @@ import com.mycompany.backOfficeAPI.dto.member.SearchTypeMember;
 @Mapper
 public interface MemberDao {
 	public void updateLastLoginDate(String memberId);
-	public int getTotalMemberNum();
+	public int getTotalMemberNum(SearchTypeMember searchTypeMember);
 	public List<Member> getAllMemberByPage(@Param(value="pager") Pager pager, @Param(value="searchTypeMember") SearchTypeMember searchTypeMember);
 }

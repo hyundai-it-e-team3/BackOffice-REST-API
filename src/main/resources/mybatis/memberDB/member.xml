@@ -37,17 +37,17 @@
 		WHERE rnum &gt;= #{pager.startRowNo}
 	</select>
 	
-	<select id="getTotalMemberNum" resultType="int">
+	<select id="getTotalMemberNum" parameterType="searchTypeMember" resultType="int">
 		SELECT count(*) 
 		FROM member m, address a
 		WHERE m.member_id = a.member_id(+)
 		AND m.member_role = 'ROLE_USER'
 		AND (a.default_address = '1' OR a.default_address IS NULL)
 		<if test="searchMemberId != 'none'">
-			AND m.member_id LIKE '%'||#{searchTypeMember.searchMemberId}||'%'
+			AND m.member_id LIKE '%'||#{searchMemberId}||'%'
 		</if>
 		<if test="searchName != 'none'">
-			AND m.name LIKE '%'||#{searchTypeMember.searchName}||'%'
+			AND m.name LIKE '%'||#{searchName}||'%'
 		</if>
 		<if test="memberLevelList != null and memberLevelList.size != 0">
 			AND member_level IN 

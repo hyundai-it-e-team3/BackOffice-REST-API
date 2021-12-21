@@ -75,9 +75,10 @@ public class MemberController {
 	@PostMapping
 	public PagerAndMember getAllMemberByPage(@RequestParam(defaultValue="1") int pageNo, 
 											 @RequestBody SearchTypeMember searchTypeMember) {
-		log.info("회원정보 조회");
+		log.info("회원 목록 조회 실행");
+		log.info(searchTypeMember.toString());
 		
-		int totalRows = memberService.getTotalMemberNum();
+		int totalRows = memberService.getTotalMemberNum(searchTypeMember);
 		Pager pager = new Pager(5, 5, totalRows, pageNo);
 		
 		List<Member> memberList = memberService.getAllMemberByPage(pager, searchTypeMember);
