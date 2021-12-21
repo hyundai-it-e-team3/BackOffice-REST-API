@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mycompany.backOfficeAPI.dao.memberDB.EventDao">
+	<select id="getEventNum" parameterType="searchTypeEvent" resultType="int">
+		SELECT count(*)
+		FROM event
+		WHERE 1 = 1
+		<if test="searchName != 'none'">
+			AND name LIKE '%'||#{searchName}||'%'
+		</if>
+		<if test="searchStartDate != 'none' and searchLastDate != 'none'">
+			AND reg_date BETWEEN #{searchStartDate} AND #{searchLastDate}
+		</if>
+		<if test="searchType != ' '">
+			AND event_type = #{searchType}
+		</if>
+		<if test="searchStatus != ' '">
+			AND status = #{searchStatus}
+		</if>
+	</select>
+	
+	<select id="getEventByPage" resultType="event">
+	SELECT rnum, event_seq, name, event_type, content, image, reg_date, start_date, exp_date, status, coupon_id
+	FROM (
+		SELECT rownum rnum, event_seq, name, event_type, content, image, reg_date, start_date, exp_date, status, coupon_id
+		FROM (
+			SELECT event_seq, name, event_type, content, image, reg_date, start_date, exp_date, status, coupon_id
+			FROM event
+			WHERE 1 = 1
+			<if test="searchTypeEvent.searchName != 'none'">
+				AND name LIKE '%'||#{searchTypeEvent.searchName}||'%'
+			</if>
+			<if test="searchTypeEvent.searchStartDate != 'none' and searchTypeEvent.searchLastDate != 'none'">
+				AND reg_date BETWEEN #{searchTypeEvent.searchStartDate} AND #{searchTypeEvent.searchLastDate}
+			</if>
+			<if test="searchTypeEvent.searchType != ' '">
+				AND event_type = #{searchTypeEvent.searchType}
+			</if>
+			<if test="searchTypeEvent.searchStatus != ' '">
+				AND status = #{searchTypeEvent.searchStatus}
+			</if>
+			ORDER BY reg_date DESC
+		)
+		WHERE rownum &lt;= #{pager.endRowNo}
+	)
+	WHERE rnum &gt;= #{pager.startRowNo}
+	</select>
+	
+	<select id="getEvent" parameterType="int" resultType="event">
+		SELECT *
+		FROM event
+		WHERE event_seq = #{eventSeq}
+	</select>
+	
+	<insert id="insertEvent" parameterType="event">
+		<selectKey keyProperty="eventSeq" resultType="int" order="BEFORE">
+			SELECT seq_event.NEXTVAL FROM DUAL
+		</selectKey>
+		INSERT INTO EVENT (event_seq, name, event_type, content, image, reg_date, start_date, exp_date, status, coupon_id)
+		VALUES (#{eventSeq}, #{name}, #{eventType}, #{content}, 'url', sysdate, #{startDate}, #{expDate}, #{status}, #{couponId})
+	</insert>
+	
+	<update id="updateEvent" parameterType="event">
+		UPDATE event
+		SET	name = #{name},
+			image = 'url',
+			content = #{content},
+			start_date = #{startDate},
+			exp_date = #{expDate},
+			status = #{status}
+		WHERE event_seq = #{eventSeq}
+	</update>
+	
+	<delete id="deleteEvent" parameterType="String">
+		DELETE FROM event
+		WHERE event_seq IN
+		<foreach item="id" collection="eventSeq" open="(" close=")" separator=",">
+			#{id}
+		</foreach>
+	</delete>
+</mapper>

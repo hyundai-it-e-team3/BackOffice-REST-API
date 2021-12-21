@@ -32,8 +32,8 @@ public class MemberService {
 	}
 	
 	//회원정보 전체 행 수 조회
-	public int getTotalMemberNum() {
-		return memberDao.getTotalMemberNum();
+	public int getTotalMemberNum(SearchTypeMember searchTypeMember) {
+		return memberDao.getTotalMemberNum(searchTypeMember);
 	}
 	
 }
