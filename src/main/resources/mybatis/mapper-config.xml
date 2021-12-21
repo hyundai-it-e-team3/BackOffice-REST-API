@@ -8,6 +8,7 @@
 		<setting name="jdbcTypeForNull" value="NULL"/>
 	</settings>
 	<typeAliases>
+		<typeAlias type="com.mycompany.backOfficeAPI.dto.member.Manager" alias="manager" />
 		<typeAlias type="com.mycompany.backOfficeAPI.dto.member.Member" alias="member" />
 		<typeAlias type="com.mycompany.backOfficeAPI.dto.member.MemberForOrder" alias="memberfororder" />
 		<typeAlias type="com.mycompany.backOfficeAPI.dto.member.MemberCoupon" alias="memberCoupon" />
