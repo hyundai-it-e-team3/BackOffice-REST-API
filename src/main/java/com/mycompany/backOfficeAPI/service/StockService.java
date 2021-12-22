@@ -16,6 +16,12 @@ public class StockService {
 	@Resource
 	private StockDAO stockDAO;
 	
+	public enum StockResult {
+		SUCCESS,
+		FAIL,
+		FAIL_STOCK
+	}
+	
 	public StockDTO getStock(StockDTO stockDTO) {
 		log.info("실행");
 		log.info(stockDTO.toString());
@@ -43,5 +49,26 @@ public class StockService {
 				}
 			}			
 		}
+	}
+	
+	public StockResult addStock(StockDTO stockDTO) {
+		StockDTO stk = stockDAO.selectByStockDTO(stockDTO);
+		if(stk ==null) {
+			return StockResult.FAIL;
+		}
+		stockDAO.updatePlusByStockDTO(stockDTO);
+		return StockResult.SUCCESS;
+	}
+	
+	public StockResult minusStock(StockDTO stockDTO) {
+		StockDTO stk = stockDAO.selectByStockDTO(stockDTO);
+		if(stk ==null) {
+			return StockResult.FAIL;
+		} else if(stk.getAmount() < stockDTO.getAmount()) {
+			return StockResult.FAIL_STOCK;
+		} 
+		stockDAO.updateMinusByStockDTO(stockDTO);
+		return StockResult.SUCCESS;
+		
 	}
 }

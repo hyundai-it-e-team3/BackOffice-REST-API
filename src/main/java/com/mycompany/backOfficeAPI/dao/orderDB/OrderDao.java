@@ -31,4 +31,5 @@ public interface OrderDao {
 
 	public List<OrderInfo> getMemberOrderByPager(@Param(value="memberId") String memberId, @Param(value="pager") Pager pager);
 	public int getTotalMemberOrderNum(String memberId);
+	public void insert(Order order);
 }

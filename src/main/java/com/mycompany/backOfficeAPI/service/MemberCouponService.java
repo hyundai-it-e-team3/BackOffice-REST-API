@@ -52,5 +52,16 @@ public class MemberCouponService {
 	public void updateMemberCoupon(MemberCoupon memberCoupon) {
 		memberCouponDao.updateMemberCoupon(memberCoupon);
 	}
+
+	public void refundMemberCoupon(MemberCoupon memberCoupon) {
+		memberCouponDao.refundMemberCoupon(memberCoupon);
+	}
+
+	public void useMemberCoupon(MemberCoupon coupon) {
+		coupon.setStatus('2');
+		updateMemberCoupon(coupon);
+		
+	}
+
 	
 }

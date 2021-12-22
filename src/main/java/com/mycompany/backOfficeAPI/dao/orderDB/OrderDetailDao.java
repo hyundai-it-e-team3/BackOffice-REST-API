@@ -10,4 +10,6 @@ import com.mycompany.backOfficeAPI.dto.order.OrderDetail;
 public interface OrderDetailDao {
 	public List<OrderDetail> selectByOid(String orderId);
 	public void updateState(OrderDetail orderDetail);
+	public void updateStateByOid(OrderDetail orderDetail);
+	public void insert(OrderDetail orderDetail);
 }

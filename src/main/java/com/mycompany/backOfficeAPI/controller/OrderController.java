@@ -1,30 +1,29 @@
 package com.mycompany.backOfficeAPI.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
 
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mycompany.backOfficeAPI.dto.Pager;
 import com.mycompany.backOfficeAPI.dto.order.Order;
 import com.mycompany.backOfficeAPI.dto.order.OrderDetail;
 import com.mycompany.backOfficeAPI.dto.order.OrderInfo;
-import com.mycompany.backOfficeAPI.dto.order.OrderSearch;
 import com.mycompany.backOfficeAPI.dto.order.PagerAndOrderInfo;
 import com.mycompany.backOfficeAPI.dto.order.Payment;
-import com.mycompany.backOfficeAPI.dto.order.SearchAndOrderInfo;
 import com.mycompany.backOfficeAPI.service.OrderService;
+import com.mycompany.backOfficeAPI.service.OrderService.OrderResult;
 import com.mycompany.backOfficeAPI.service.PointService;
 import com.mycompany.backOfficeAPI.service.StockService;
 
@@ -61,6 +60,19 @@ public class OrderController{
 		log.info("orderId : " + orderId);
 
 		return orderService.getOrderInfo(orderId);
+	}
+	
+	@PutMapping("/{orderId}") 
+	public Map<String, Object> reorder(
+			@PathVariable String orderId) {
+		Map<String,Object> result = new HashMap<String,Object>();
+		log.info("실행");
+		log.info("orderId : " + orderId);
+		
+		OrderResult or = orderService.reorderWithReturn(orderId);
+		
+		if(or == OrderResult.SUCCESS) result.put("result", "success");
+		return result;
 	}
 	
 	@GetMapping("/{orderId}/list") 

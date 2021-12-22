@@ -10,7 +10,7 @@ public class OrderDetail {
 	int amount;
 	int price;
 	String state;
-	String stateCode;
+	int stateCode;
 	String deliveryNo;
 	
 	String brand;

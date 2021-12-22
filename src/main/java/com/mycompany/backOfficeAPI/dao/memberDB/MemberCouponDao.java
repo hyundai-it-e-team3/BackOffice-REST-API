@@ -15,4 +15,6 @@ public interface MemberCouponDao {
 	public void insertMemberCoupon(MemberCoupon memberCoupon);
 	public void updateMemberCoupon(MemberCoupon memberCoupon);
 	public MemberCoupon getDuplicateCoupon(MemberCoupon memberCoupon);
+	public void refundMemberCoupon(MemberCoupon memberCoupon);
+	public MemberCoupon getMemberCouponByMemberCoupon(MemberCoupon memberCoupon);
 }

@@ -41,4 +41,18 @@
 		FROM member_coupon
 		WHERE member_id = #{memberId} AND coupon_id = #{couponId}
 	</select>
+	
+	<update id="refundMemberCoupon" parameterType="memberCoupon">
+		UPDATE member_coupon
+		SET status = '1',
+			use_date = null
+		WHERE member_id = #{memberId} AND coupon_id = #{couponId}
+	</update>
+	
+	<select id="getMemberCouponByMemberCoupon" parameterType="memberCoupon" resultType="memberCoupon">
+		SELECT  mc.coupon_id, mc.reg_date, mc.exp_date, mc.status, mc.use_date, c.name, c.amount, c.type, c.content
+		FROM member_coupon mc, coupon c
+		WHERE mc.coupon_id = c.coupon_id
+		AND mc.member_id = #{memberId} AND mc.coupon_id = #{couponId}
+	</select>
 </mapper>
