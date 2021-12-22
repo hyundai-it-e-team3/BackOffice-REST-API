@@ -15,6 +15,7 @@
 		<typeAlias type="com.mycompany.backOfficeAPI.dto.member.Point" alias="point" />
 		<typeAlias type="com.mycompany.backOfficeAPI.dto.member.Coupon" alias="coupon" />
 		<typeAlias type="com.mycompany.backOfficeAPI.dto.member.Event" alias="event" />
+		<typeAlias type="com.mycompany.backOfficeAPI.dto.member.DetailPoint" alias="detailPoint" />
 		
 		<typeAlias type="com.mycompany.backOfficeAPI.dto.member.SearchTypeMember" alias="searchTypeMember" />
 		<typeAlias type="com.mycompany.backOfficeAPI.dto.member.SearchTypeCoupon" alias="searchTypeCoupon" />
