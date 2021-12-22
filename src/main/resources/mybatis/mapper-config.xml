@@ -47,6 +47,7 @@
 		<typeAlias type="com.mycompany.backOfficeAPI.dto.dashboard.MemberDashboard" alias="memberDashboard"/>
 		<typeAlias type="com.mycompany.backOfficeAPI.dto.dashboard.SaleDashboard" alias="sale"/>
 		
+		<typeAlias type="com.mycompany.backOfficeAPI.dto.batch.OrderTotalPriceForMonthOfMember" alias="orderTotalPriceForMonthOfMember"/>
 	</typeAliases>
 </configuration>
 

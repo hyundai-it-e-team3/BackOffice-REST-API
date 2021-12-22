@@ -328,5 +328,12 @@
   		FROM morder
   		WHERE member_id = #{memberId}
   	</select>
+  	
+  	<select id="getOrderTotalPriceForMonthOfMember" resultType="orderTotalPriceForMonthOfMember">
+  		SELECT member_id, sum(total_price) totalPrice
+  		FROM morder
+  		WHERE order_date BETWEEN TRUNC(SYSDATE, 'MM') AND SYSDATE
+  		GROUP BY member_id
+  	</select>
 </mapper>
 

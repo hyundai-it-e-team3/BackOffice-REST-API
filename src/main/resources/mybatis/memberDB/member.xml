@@ -56,4 +56,13 @@
 	        </foreach>
 		</if>
 	</select>
+	
+	<update id="updateMemberLevel">
+		UPDATE member
+		SET member_level = #{level}
+		WHERE member_id IN
+		<foreach item="memberId" collection="memberIdList" open="(" close=")" separator="," >
+			#{memberId}
+		</foreach>
+	</update>
 </mapper>
