@@ -22,4 +22,30 @@
 		)
 		WHERE rnum &gt;= #{pager.startRowNo}
 	</select>
+	
+	<select id="selectRefundPoint" parameterType="point" resultType="String">
+		SELECT point_seq
+		FROM point
+		WHERE member_id = #{memberId}
+		AND order_id = #{orderId}
+		AND type = '사용'
+	</select>
+	
+	<update id="updateRefundPoint" parameterType="point">
+		UPDATE point
+		SET type = '환불',
+			point = (point * -1)
+		WHERE member_id = #{memberId}
+		AND order_id = #{orderId}
+		AND type = '사용'
+	</update>
+	
+	<insert id="insertUsePoint" parameterType="point">
+		<selectKey keyProperty="pointSeq" resultType="int" order="BEFORE">
+			SELECT seq_point.NEXTVAL FROM DUAL
+		</selectKey>
+		INSERT INTO point (point_seq, member_id, order_id, type, point, reg_date)
+		VALUES (#{pointSeq}, #{memberId}, #{orderId}, #{type}, #{point}, sysdate)
+	</insert>
+	
 </mapper>

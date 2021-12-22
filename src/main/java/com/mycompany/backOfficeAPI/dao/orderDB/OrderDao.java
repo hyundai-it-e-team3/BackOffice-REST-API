@@ -32,6 +32,7 @@ public interface OrderDao {
 
 	public List<OrderInfo> getMemberOrderByPager(@Param(value="memberId") String memberId, @Param(value="pager") Pager pager);
 	public int getTotalMemberOrderNum(String memberId);
+	public void insert(Order order);
 	
 	//멤버십 레벨 업데이트
 	public List<OrderTotalPriceForMonthOfMember> getOrderTotalPriceForMonthOfMember();	

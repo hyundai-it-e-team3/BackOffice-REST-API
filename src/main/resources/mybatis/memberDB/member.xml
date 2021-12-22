@@ -57,6 +57,18 @@
 		</if>
 	</select>
 	
+	<update id="updatePointBalance" parameterType="member">
+		UPDATE member
+		SET point = (SELECT point FROM member WHERE member_id = #{memberId}) + #{point}
+		WHERE member_id = #{memberId}
+	</update>
+	<select id="getMemberPoint" parameterType="String" resultType="int">
+		SELECT point
+		FROM member
+		WHERE member_id = #{memberId}
+	</select>
+	
+	
 	<update id="updateMemberLevel">
 		UPDATE member
 		SET member_level = #{level}

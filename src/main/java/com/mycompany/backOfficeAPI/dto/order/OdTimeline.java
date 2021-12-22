@@ -11,5 +11,5 @@ public class OdTimeline {
 	String orderId;
 	Date issueDate;
 	String state;
-	String stateCode;
+	int stateCode;
 }
