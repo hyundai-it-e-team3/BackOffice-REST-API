@@ -16,8 +16,7 @@ import org.quartz.TriggerBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 
-import com.mycompany.backOfficeAPI.run.JobA;
-import com.mycompany.backOfficeAPI.run.JobB;
+import com.mycompany.backOfficeAPI.run.MemberLevelUpdateJob;
 import com.mycompany.backOfficeAPI.run.UpdateDashboardJob;
 
 @Configuration
@@ -29,12 +28,12 @@ public class JobSetting {
     @PostConstruct
     public void start(){
 
-        JobDetail jobDetailA = buildJobDetail(JobA.class, new HashMap());
+        JobDetail memberLevelUpdateJob = buildJobDetail(MemberLevelUpdateJob.class, new HashMap());
         JobDetail jobUpdateDash = buildJobDetail(UpdateDashboardJob.class, new HashMap());
         
         try{
-        	//20초마다 실행
-            //scheduler.scheduleJob(jobDetailA, buildJobTrigger("0/20 * * * * ?"));
+        	//매일 정오??
+            scheduler.scheduleJob(memberLevelUpdateJob, buildJobTrigger("0 59 23 L * ?"));
             
             //매일 정오에 실행
             scheduler.scheduleJob(jobUpdateDash, buildJobTrigger("0 0 12  * * ?"));

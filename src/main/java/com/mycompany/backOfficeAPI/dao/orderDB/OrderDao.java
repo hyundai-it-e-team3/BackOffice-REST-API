@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.mycompany.backOfficeAPI.dto.Pager;
+import com.mycompany.backOfficeAPI.dto.batch.OrderTotalPriceForMonthOfMember;
 import com.mycompany.backOfficeAPI.dto.order.Order;
 import com.mycompany.backOfficeAPI.dto.order.OrderInfo;
 import com.mycompany.backOfficeAPI.dto.order.OrderSearch;
@@ -31,4 +32,7 @@ public interface OrderDao {
 
 	public List<OrderInfo> getMemberOrderByPager(@Param(value="memberId") String memberId, @Param(value="pager") Pager pager);
 	public int getTotalMemberOrderNum(String memberId);
+	
+	//멤버십 레벨 업데이트
+	public List<OrderTotalPriceForMonthOfMember> getOrderTotalPriceForMonthOfMember();	
 }
