@@ -274,67 +274,69 @@ public class OrderService {
 			totalPrice += orderDetail.getPrice();
 			newOrderDetailList.add(orderDetail);
 		}
-		orderInfo.setOrderDetailList(newOrderDetailList);
-		orderInfo.setTotalPrice(totalPrice);
-		
-		
-		log.info("결제 정보 생성");
-		List<Payment> paymentList = orderInfo.getPaymentList();
-		List<Payment> newPaymentList = new ArrayList<Payment>();
-		
-		//쿠폰 사용했었으면 쿠폰 할인률은 다시 계산
-		log.info("쿠폰 할인률 다시 계산");
-		if(orderInfo.getCouponId() != null && orderInfo.getCouponId() != "") {
-			MemberCoupon param = new MemberCoupon();
-			param.setCouponId(orderInfo.getCouponId());
-			param.setMemberId(orderInfo.getMemberId());
-			MemberCoupon memberCoupon = memberCouponDao.getMemberCouponByMemberCoupon(param);
-			Payment payment = new Payment();
-			payment.setOrderId(orderInfo.getOrderId());
-			payment.setStateCode(1);
-			payment.setTypeCode(1);
-			if(memberCoupon.getType() == '2') {
-				int couponPrice = totalPrice * memberCoupon.getAmount() / 100;
-				payment.setPrice(couponPrice);
-				totalPrice -= couponPrice;
-			} else {
-				payment.setPrice(memberCoupon.getAmount());
-				totalPrice -= memberCoupon.getAmount();
+		if(newOrderDetailList.size() > 0) {
+			orderInfo.setOrderDetailList(newOrderDetailList);
+			orderInfo.setTotalPrice(totalPrice);
+			
+			
+			log.info("결제 정보 생성");
+			List<Payment> paymentList = orderInfo.getPaymentList();
+			List<Payment> newPaymentList = new ArrayList<Payment>();
+			
+			//쿠폰 사용했었으면 쿠폰 할인률은 다시 계산
+			log.info("쿠폰 할인률 다시 계산");
+			if(orderInfo.getCouponId() != null && orderInfo.getCouponId() != "") {
+				MemberCoupon param = new MemberCoupon();
+				param.setCouponId(orderInfo.getCouponId());
+				param.setMemberId(orderInfo.getMemberId());
+				MemberCoupon memberCoupon = memberCouponDao.getMemberCouponByMemberCoupon(param);
+				Payment payment = new Payment();
+				payment.setOrderId(orderInfo.getOrderId());
+				payment.setStateCode(1);
+				payment.setTypeCode(1);
+				if(memberCoupon.getType() == '2') {
+					int couponPrice = totalPrice * memberCoupon.getAmount() / 100;
+					payment.setPrice(couponPrice);
+					totalPrice -= couponPrice;
+				} else {
+					payment.setPrice(memberCoupon.getAmount());
+					totalPrice -= memberCoupon.getAmount();
+				}
+				
+				newPaymentList.add(payment);
 			}
 			
-			newPaymentList.add(payment);
-		}
-		
-		//포인트 사용 금액과 결제 금액을 계산
-		log.info("포인트 사용 금액 및 재결제 금액 계산");
-		Payment mainPayment;
-		for(Payment payment : paymentList) {
-			if(payment.getTypeCode() == 1) {
-				continue;
-			} else if(payment.getTypeCode() == 2) {
-				if(payment.getPrice() > totalPrice) {
-					payment.setPrice(totalPrice);
-					payment.setStateCode(1);
-					newPaymentList.add(payment);
+			//포인트 사용 금액과 결제 금액을 계산
+			log.info("포인트 사용 금액 및 재결제 금액 계산");
+			Payment mainPayment;
+			for(Payment payment : paymentList) {
+				if(payment.getTypeCode() == 1) {
+					continue;
+				} else if(payment.getTypeCode() == 2) {
+					if(payment.getPrice() > totalPrice) {
+						payment.setPrice(totalPrice);
+						payment.setStateCode(1);
+						newPaymentList.add(payment);
+					} else {
+						totalPrice -= payment.getPrice();
+						payment.setStateCode(1);
+						newPaymentList.add(payment);
+					}
 				} else {
-					totalPrice -= payment.getPrice();
-					payment.setStateCode(1);
-					newPaymentList.add(payment);
+					mainPayment = payment;
+					mainPayment.setPrice(totalPrice);
+					mainPayment.setStateCode(1);
+					mainPayment.setTypeCode(payment.getTypeCode());
+					newPaymentList.add(mainPayment);
 				}
-			} else {
-				mainPayment = payment;
-				mainPayment.setPrice(totalPrice);
-				mainPayment.setStateCode(1);
-				mainPayment.setTypeCode(payment.getTypeCode());
-				newPaymentList.add(mainPayment);
 			}
+			orderInfo.setPaymentList(newPaymentList);
+			
+			// 재주문 실행
+			log.info("재주문 실행");
+			log.info(orderInfo+"");
+			insertOrder(orderInfo);
 		}
-		orderInfo.setPaymentList(newPaymentList);
-		
-		// 재주문 실행
-		log.info("재주문 실행");
-		log.info(orderInfo+"");
-		insertOrder(orderInfo);
 		return OrderResult.SUCCESS;
 	}
 	
