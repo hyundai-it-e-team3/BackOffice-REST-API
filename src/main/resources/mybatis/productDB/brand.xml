@@ -3,16 +3,13 @@
 
 <mapper namespace="com.mycompany.backOfficeAPI.dao.productDB.BrandDAO">
 	<select id="selectAllBrand" resultType="brandCategory">
-		SELECT brand_name 
+		SELECT *
 		FROM brand
 		order by brand_name
 	</select>	
 
 	<select id="selectMdPickByBrand" parameterType="string" resultType="product">
-		<![CDATA[
-			select a.*,rownum from (select * from product where product.brand_name=#{brandName} order by product.hit_count) a
-				where rownum<3
-		]]>
+		SELECT a.* FROM product a, brand_main_product b WHERE a.product_id = b.product_id AND b.brand_name = #{brandName}
 	</select>	
 	
 	<select id="selectMainBrand" resultType="brandCategoryTemp">

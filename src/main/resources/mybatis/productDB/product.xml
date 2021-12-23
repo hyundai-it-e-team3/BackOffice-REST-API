@@ -17,15 +17,15 @@
 	
 	<select id="selectProductListBySearch" parameterType="productSearch" resultType="product">
 			SELECT rnum , product_id,name,price,content,hit_count
-						,status,reg_date,brand_name,thumbnail
-						,category_id,parent_category_id,clevel,category_name
+						,status,reg_date,brand_name,thumbnail,md_status
+						,category_id,parent_category_id,clevel,category_name,purchase_amount
 				FROM(SELECT rownum as rnum, product_id,name,price,content,hit_count
-						,status,reg_date,brand_name,thumbnail
-						,category_id,parent_category_id,clevel,category_name
+						,status,reg_date,brand_name,thumbnail,md_status
+						,category_id,parent_category_id,clevel,category_name,purchase_amount
 					FROM(SELECT 
 						a.product_id,a.name,price,content,hit_count
-						,status,reg_date,brand_name,thumbnail
-						,b.category_id,c.parent_category_id, c.clevel,c.name category_name
+						,status,reg_date,brand_name,thumbnail,md_status
+						,b.category_id,c.parent_category_id, c.clevel,c.name category_name, a.purchase_amount
 						FROM product a, product_category b, category c
 						WHERE 
 							a.product_id = b.product_id AND
@@ -38,10 +38,20 @@
 				    			OR a.name like '%'||#{keyWord}||'%'
 				    			OR a.brand_name like '%'||#{keyWord}||'%') AND
 				    		</if>
+				    		<if test="brandName!=null and !brandName.equals('')">
+								brand_name = #{brandName} AND
+							</if>
 				    		
 				    		<if test="regStart != '' and regEnd != ''" >
 				    			<![CDATA[ (a.reg_date >= #{regStart} AND a.reg_date <= #{regEnd})]]> AND
 				    		</if>
+				    		<if test="mdStatus != 2">
+    							md_status = #{mdStatus} AND
+    						</if>
+    						
+    						<if test="status != 2">
+    							status = #{status} AND
+    						</if>
 				    		
 				    		<if test="regStart == '' and regEnd != ''" >
 				    			<![CDATA[ a.reg_date <= #{regEnd} ]]> AND 
@@ -68,13 +78,17 @@
 		WHERE 
 			a.product_id = b.product_id AND
 			<if test="searchType != 'None' ">
-    			${searchType} like '%'||#{keyWord}||'%' AND
+    			a.${searchType} like '%'||#{keyWord}||'%' AND
     		</if>
  			<if test="searchType == 'None' ">
     			(a.product_id like '%'||#{keyWord}||'%' 
     			OR name like '%'||#{keyWord}||'%'
     			OR brand_name like '%'||#{keyWord}||'%') AND
     		</if>
+    		
+			<if test="brandName!=null and !brandName.equals('')">
+				brand_name = #{brandName} AND
+			</if>
     		
     		<if test="regStart != '' and regEnd != ''" >
     			<![CDATA[ (reg_date >= #{regStart} AND reg_date <= #{regEnd})]]> AND
@@ -88,6 +102,9 @@
     			<![CDATA[ reg_date >= #{regStart} ]]> AND 
     		</if>
     		
+    		<if test="mdStatus != 2">
+    			md_status = #{mdStatus} AND
+    		</if>
     		
     		b.category_id like '%'||#{categoryId}||'%'
     	
@@ -162,16 +179,37 @@
 		</foreach>
 	</select>
 	
+	<select id="selectStatusById" parameterType="string" resultType="int">
+		select distinct status from product where product_id = #{productId}
+	</select>
+	
 	<update id="updateHitCount" parameterType="string">
 		UPDATE product SET hit_count =  hit_count + 1 WHERE product_id = #{productId}
 	</update>
 	
+	<update id="updateMdStatus" parameterType="product">
+		UPDATE product SET md_status = #{mdStatus} WHERE product_id = #{productId}
+	</update>
+	
+	<update id="updateStatus" parameterType="map">
+		UPDATE product SET status = #{status} WHERE product_id = #{productId}
+	</update>
 	
 	
 	<insert id="insertProduct" parameterType="product">
 		INSERT INTO product(product_id,name,content,price,brand_name,hit_count,status,reg_date,thumbnail) 
 		VALUES(#{productId},#{name},#{content},#{price},#{brandName},0,#{status},SYSDATE,#{thumbnail})
 	</insert>
+	
+	<insert id="insertMdProduct" parameterType="product">
+		INSERT INTO brand_main_product(product_id,brand_name,reg_date) 
+		VALUES(#{productId},#{brandName},SYSDATE)
+	</insert>
+	
+	
+	<delete id="deleteMdProduct" parameterType="product">
+		DELETE FROM brand_main_product WHERE product_id = #{productId}
+	</delete>
 </mapper>
 
 

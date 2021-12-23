@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mycompany.backOfficeAPI.dto.product.BrandDTO;
@@ -25,6 +26,7 @@ import com.mycompany.backOfficeAPI.dto.product.ProductSearchDTO;
 import com.mycompany.backOfficeAPI.dto.product.StockDetailDTO;
 import com.mycompany.backOfficeAPI.service.ProductDetailService;
 import com.mycompany.backOfficeAPI.service.ProductService;
+import com.mycompany.backOfficeAPI.service.S3UploaderService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -38,6 +40,9 @@ public class ProductController {
 	
 	@Resource
 	private ProductDetailService productDetailService;
+	
+	@Resource
+	private S3UploaderService s3UploaderService;
 	
 	@GetMapping("/{productId}")
 	public ProductDTO getProduct(@PathVariable String productId){
@@ -139,6 +144,16 @@ public class ProductController {
 		return map;
 	}
 	
+	@PostMapping("/changeStatus")
+	public Map<String,String> changeStatus(@RequestBody List<String> productIdList){
+		Map<String,String> map = new HashMap<>();
+		map.put("result","success");
+		
+		productService.changeStatus(productIdList);
+		
+		return map;
+	}
+	
 	@PostMapping("/productList")
 	public Map<String,Object> getProductList(@RequestBody ProductSearchDTO productSearchDTO){		
 		
@@ -204,4 +219,23 @@ public class ProductController {
 		return resultMap;
 	}
 	
+	@PostMapping("/regMdProduct")
+	public Map<String,Object> regMdProduct(@RequestBody ProductDTO productDTO){		
+		
+		Map<String,Object> resultMap = new HashMap<>();
+		
+		productService.regMdProduct(productDTO);
+
+		return resultMap;
+	}
+	
+	@PostMapping("/delMdProduct")
+	public Map<String,Object> delMdProduct(@RequestBody ProductDTO productDTO){		
+		
+		Map<String,Object> resultMap = new HashMap<>();
+		
+		productService.delMdProduct(productDTO);
+
+		return resultMap;
+	}
 }

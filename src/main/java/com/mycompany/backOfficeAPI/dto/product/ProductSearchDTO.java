@@ -12,6 +12,8 @@ public class ProductSearchDTO {
 	private String status;
 	private String sortId;
 	private String pageNo;
+	private String brandName;
+	private int mdStatus;
 	private int startRow;
 	private int endRow;
 }

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.mycompany.backOfficeAPI.dto.product.ColorDTO;
 import com.mycompany.backOfficeAPI.dto.product.ProductDTO;
@@ -45,5 +46,18 @@ public interface ProductDAO {
 	public List<ColorDTO> selectAllColor();
 
 	public void insertProduct(ProductDTO productDTO);
+
+	public void insertMdProduct(ProductDTO productDTO);
+
+	public void updateMdStatus(ProductDTO productDTO);
+
+	public void deleteMdProduct(ProductDTO productDTO);
+
+	public void updateStatus(String productId);
+
+
+	public void updateStatus(@Param(value = "productId") String productId,@Param(value = "status")int status);
+
+	public int selectStatusById(String productId);
 
 }
