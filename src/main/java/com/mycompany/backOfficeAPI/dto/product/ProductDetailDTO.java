@@ -2,6 +2,7 @@ package com.mycompany.backOfficeAPI.dto.product;
 
 import java.util.List;
 
+
 import lombok.Data;
 
 @Data

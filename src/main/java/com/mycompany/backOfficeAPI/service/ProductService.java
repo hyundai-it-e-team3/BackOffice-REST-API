@@ -235,5 +235,34 @@ public class ProductService {
 		return stockDAO.selectAllSize();
 	}
 
+	@Transactional
+	public void regMdProduct(ProductDTO productDTO) {
+		
+		productDTO.setMdStatus(1);
+		productDAO.insertMdProduct(productDTO);
+		productDAO.updateMdStatus(productDTO);
+	}
+
+	public void delMdProduct(ProductDTO productDTO) {
+		productDTO.setMdStatus(0);
+		productDAO.deleteMdProduct(productDTO);
+		productDAO.updateMdStatus(productDTO);
+		
+	}
+
+	public void changeStatus(List<String> productIdList) {
+		
+		
+		for(String productId: productIdList) {
+			int statusTemp = productDAO.selectStatusById(productId);
+		
+			if(statusTemp==1) {
+				productDAO.updateStatus(productId,0);
+			}else{
+				productDAO.updateStatus(productId,1);
+			}
+			
+		}
+	}
 
 }
