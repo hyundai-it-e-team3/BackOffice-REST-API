@@ -16,6 +16,7 @@ import org.quartz.TriggerBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 
+import com.mycompany.backOfficeAPI.run.DeleteExpiryPointJob;
 import com.mycompany.backOfficeAPI.run.MemberLevelUpdateJob;
 import com.mycompany.backOfficeAPI.run.UpdateDashboardJob;
 
@@ -29,11 +30,15 @@ public class JobSetting {
     public void start(){
 
         JobDetail memberLevelUpdateJob = buildJobDetail(MemberLevelUpdateJob.class, new HashMap());
+        JobDetail deleteExpiryPointJob = buildJobDetail(DeleteExpiryPointJob.class, new HashMap());
         JobDetail jobUpdateDash = buildJobDetail(UpdateDashboardJob.class, new HashMap());
         
         try{
-        	//매일 정오??
+        	//매일 23시 59분 실행
             scheduler.scheduleJob(memberLevelUpdateJob, buildJobTrigger("0 59 23 L * ?"));
+            
+            //매일 0시 1번 실행
+            scheduler.scheduleJob(deleteExpiryPointJob, buildJobTrigger("0 1 0 * * ?"));
             
             //매일 정오에 실행
             scheduler.scheduleJob(jobUpdateDash, buildJobTrigger("0 0 12  * * ?"));

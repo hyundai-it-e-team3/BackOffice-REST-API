@@ -18,4 +18,8 @@ public interface DetailPointDao {
 	public List<DetailPoint> selectRefundDetailPoint(Point refundPointSeq);
 	public void updateUsePointBalanceAndStatus(DetailPoint detailPoint);
 	public void updateRefundDetailPoint(Point refundPointSeq);
+  
+	//만료 포인트 소멸
+	public List<DetailPoint> getExpiryDetailPoint();
+	public void updateExpiryDetailPoint(DetailPoint detailPoint);
 }

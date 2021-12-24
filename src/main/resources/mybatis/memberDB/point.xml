@@ -48,4 +48,11 @@
 		VALUES (#{pointSeq}, #{memberId}, #{orderId}, #{type}, #{point}, sysdate)
 	</insert>
 	
+	<insert id="insertExpiryPoint" parameterType="detailPoint">
+		<selectKey keyProperty="pointSeq" resultType="int" order="BEFORE">
+			SELECT seq_point.NEXTVAL FROM DUAL
+		</selectKey>
+		INSERT INTO point (point_seq, member_id, type, point, reg_date)
+		VALUES (#{pointSeq}, #{memberId}, '소멸', #{balance}, sysdate)
+	</insert>
 </mapper>

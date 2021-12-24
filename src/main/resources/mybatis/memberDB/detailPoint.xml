@@ -64,5 +64,18 @@
 		WHERE point_seq = #{pointSeq}
 	</update>
 
-
+	<select id="getExpiryDetailPoint" resultType="detailPoint">
+		SELECT *
+		FROM detail_point
+		WHERE type = '적립'
+		AND status = '1'
+		AND reg_date = sysdate - 30
+	</select>
+	
+	<update id="updateExpiryDetailPoint" parameterType="detailPoint">
+		UPDATE detail_point
+		SET type = '소멸',
+			status = '0'
+		WHERE detail_point_seq = #{detailPointSeq}
+	</update>
 </mapper>
