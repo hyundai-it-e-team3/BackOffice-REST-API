@@ -83,11 +83,11 @@
 		    <version>2.2.1.RELEASE</version>
 		    <type>pom</type>
 		</dependency>
-		  <dependency>
+	  	<dependency>
 		    <groupId>com.amazonaws</groupId>
 		    <artifactId>aws-java-sdk</artifactId>
 		    <version>1.11.1000</version>
-		  </dependency>
+		</dependency>
 	</dependencies>
 
 	<build>
