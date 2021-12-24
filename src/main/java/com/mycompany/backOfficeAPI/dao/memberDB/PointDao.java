@@ -13,11 +13,13 @@ import com.mycompany.backOfficeAPI.dto.member.Point;
 public interface PointDao {
 	public int getTotalPointNum(String memberid);
 	public List<Point> getPointListByPage(@Param(value="memberId") String memberId, @Param(value="pager") Pager pager);
-	public List<String> selectRefundPoint(Point refundPoint);
-	public void updateRefundPoint(Point refundPoint);
+	public List<Point> getPointList(String memberId);
 	public void insertSavePoint(Point savePoint);
 	public void insertUsePoint(Point usePoint);
-	
+	public void updateRefundPoint(Point refundPoint);
+	public Point selectRefundPoint(Point refundPoint);
+  
 	//만료 포인트 소멸
 	public void insertExpiryPoint(DetailPoint detailPoint);
+	
 }
