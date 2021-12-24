@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.mycompany.backOfficeAPI.dto.Pager;
+import com.mycompany.backOfficeAPI.dto.member.DetailPoint;
 import com.mycompany.backOfficeAPI.dto.member.Point;
 
 @Mapper
@@ -16,4 +17,7 @@ public interface PointDao {
 	public void updateRefundPoint(Point refundPoint);
 	public void insertSavePoint(Point savePoint);
 	public void insertUsePoint(Point usePoint);
+	
+	//만료 포인트 소멸
+	public void insertExpiryPoint(DetailPoint detailPoint);
 }
