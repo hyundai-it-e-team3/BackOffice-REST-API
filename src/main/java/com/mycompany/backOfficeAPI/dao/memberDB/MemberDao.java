@@ -17,6 +17,7 @@ public interface MemberDao {
 	public void updateLastLoginDate(String memberId);
 	public int getTotalMemberNum(SearchTypeMember searchTypeMember);
 	public List<Member> getAllMemberByPage(@Param(value="pager") Pager pager, @Param(value="searchTypeMember") SearchTypeMember searchTypeMember);
+	public void updateMember(Member member);
 	
 	//멤버십 레벨 업데이트
 	public void updateMemberLevel(@Param(value="level") String level, @Param(value="memberIdList") List<String> memberIdList);

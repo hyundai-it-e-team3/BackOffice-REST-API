@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -43,4 +45,20 @@ public class MemberController {
 		return data;
 	}
 	
+	@GetMapping("/{memberId}")
+	public Member getMember(@PathVariable String memberId) {
+		log.info("회원정보 조회 실행");
+		
+		Member member = memberService.getMember(memberId);
+		
+		return member;
+	}
+	
+	@PostMapping("/update")
+	public String updateMember(@RequestBody Member member) {
+		log.info("회원정보 수정 실행");
+		log.info(member.toString());
+		String result = memberService.updateMember(member);
+		return result;
+	}
 }
