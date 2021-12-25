@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mycompany.backOfficeAPI.dao.memberDB.AddressDao">
+	<update id="updateAddress" parameterType="member">
+		UPDATE address
+		SET address1 = #{address1},
+			address2 = #{address2}
+		WHERE member_id = #{memberId}
+		AND default_address = '1'
+	</update>
+</mapper>

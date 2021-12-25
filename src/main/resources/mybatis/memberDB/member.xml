@@ -9,11 +9,11 @@
 	</update>
 	
 	<select id="getAllMemberByPage" resultType="member">
-		SELECT rnum, member_id, name, nickname, email, tel, birthday, member_level, kakao_no, member_role, status, last_login_date, point, reg_date, address1, address2
+		SELECT rnum, member_id, name, nickname, email, tel, birthday, member_level, kakao_no, member_role, status, last_login_date, point, reg_date, gender, address1, address2
 		FROM (	
-			SELECT rownum as rnum, member_id, name, nickname, email, tel, birthday, member_level, kakao_no, member_role, status, last_login_date, point, reg_date, address1, address2
+			SELECT rownum as rnum, member_id, name, nickname, email, tel, birthday, member_level, kakao_no, member_role, status, last_login_date, point, reg_date, gender, address1, address2
 			FROM (
-				SELECT m.member_id, m.name, nickname, email, m.tel, birthday, member_level, kakao_no, member_role, status, last_login_date, point, reg_date, address1, address2
+				SELECT m.member_id, m.name, nickname, email, m.tel, birthday, member_level, kakao_no, member_role, status, last_login_date, point, reg_date, gender, address1, address2
 				FROM member m, address a
 				WHERE m.member_id = a.member_id(+)
 				AND m.member_role = 'ROLE_USER'
@@ -62,6 +62,7 @@
 		SET point = (SELECT point FROM member WHERE member_id = #{memberId}) + #{point}
 		WHERE member_id = #{memberId}
 	</update>
+	
 	<select id="getMemberPoint" parameterType="String" resultType="int">
 		SELECT point
 		FROM member
@@ -76,5 +77,23 @@
 		<foreach item="memberId" collection="memberIdList" open="(" close=")" separator="," >
 			#{memberId}
 		</foreach>
+	</update>
+	
+	<select id="getMember" parameterType="String" resultType="member">
+		SELECT m.member_id, m.name, nickname, email, m.tel, birthday, member_level, kakao_no, member_role, status, last_login_date, point, reg_date, gender, address1, address2
+		FROM member m, address a
+		WHERE m.member_id = a.member_id(+)
+		AND m.member_id = #{memberId}
+		AND (a.default_address = '1' OR a.default_address IS NULL)
+	</select>
+	
+	<update id="updateMember" parameterType="member">
+		UPDATE member
+		SET name = #{name},
+			email = #{email},
+			tel = #{tel},
+			member_level = #{memberLevel},
+			status = #{status}
+		WHERE member_id = #{memberId}
 	</update>
 </mapper>

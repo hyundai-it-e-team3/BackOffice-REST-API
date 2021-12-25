@@ -21,6 +21,7 @@ public class Member {
 	private Date lastLoginDate;
 	private int point;
 	private Date regDate;
+	private String gender;
 	
 	private String address1;
 	private String address2;
