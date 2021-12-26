@@ -204,6 +204,7 @@ public class ProductService {
 	@Transactional
 	public void registProduct(ProductDTO productDTO) {
 		log.info("1--------");
+		productDTO.setMdStatus(0);
 		productDAO.insertProduct(productDTO);
 		log.info("2--------");
 		categoryDAO.insertCategory(productDTO);
